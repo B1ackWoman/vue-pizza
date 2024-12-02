@@ -17,6 +17,7 @@ const emit = defineEmits(['addIng'])
       v-for="item in items"
       :key="item.id"
       :image-url="item.imageUrl"
+      :is-added="item.isAdded"
       :text="item.text"
       :price="item.price"
       @add-Ing="() => emit('addIng', item)"

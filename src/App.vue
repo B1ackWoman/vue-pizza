@@ -7,6 +7,8 @@ import NavPanel from './components/NavPanel.vue';
 import FilterAll from './components/FilterAll.vue'
 import PopItem from './components/PopItem.vue';
 
+const modalOpen = ref(false)
+
 const items = ref([])
 const itemsTime = ref([])
 
@@ -31,9 +33,21 @@ const ingredientsFilter = ref([])
 
 const size = ref([])
 const ingredients = ref([])
+
+const ingForPizza = ref([])
+
 const type = ref([])
 
 const typeTime = ref([])
+
+
+const modalOpenClose = () => {
+  if (modalOpen.value) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
+  }
+}
 
 const haveValue = () => {
   value1.value = minPrice.value
@@ -95,7 +109,6 @@ const fetchItems = async () => {
     snacks.value = itemsTime.value.filter(fil => fil.class === 'snacks')
     cocktails.value = itemsTime.value.filter(fil => fil.class === 'cocktails')
     drinks.value = itemsTime.value.filter(fil => fil.class === 'drinks')
-    console.log(maxPrice.value)
     haveValue()
   } catch (err) {
     console.log(err)
@@ -117,6 +130,7 @@ const fetchFilter = async () => {
     const { data } = await axios.get('https://67184dbcb9589601.mokky.dev/filters')
     size.value = data.filter(filter => filter.class === 'size')
     ingredients.value = data.filter(filter => filter.class === 'ingredients')
+    ingForPizza.value = data.filter(filter => filter.class === 'ingredients')
     type.value = data.filter(filter => filter.class === 'type')
     ingredientsFilter.value = ingredients.value.map(ing => ing.text)
   } catch (err) {
@@ -124,12 +138,17 @@ const fetchFilter = async () => {
   }
 }
 
+provide('model', {
+  modalOpen
+})
+
 provide('box', {
   addOrDelSize,
   addOrDelIng,
   addOrDelType,
   size,
   ingredients,
+  ingForPizza,
   type
 })
 
@@ -177,12 +196,12 @@ onMounted(async () => {
       <h2 class="font-extrabold text-3xl">Все пиццы</h2>
       </div>
     </div>
-    <div class="sticky top-0 z-45 bg-white flex flex-col items-center border-b shadow-md rounded-xl">
+    <div  class="sticky top-0 z-10 bg-white flex flex-col items-center border-b shadow-md rounded-xl">
       <div class="w-full max-w-screen-xl px-10 py-6 bg-white">
         <NavPanel :content-list="0" />
       </div>
     </div>
-    <div :style="{zIndex: -1}" class="relative flex flex-col justify-center items-center w-full h-full py-7 px-7">
+    <div :style="{zIndex: 0}" class="relative flex flex-col justify-center items-center w-full h-full py-7 px-7">
       <div class="w-full h-full bg-white rounded-2xl max-w-screen-xl">
           <div class="flex py-10 px-10 gap-20">
             <div class="w-min">

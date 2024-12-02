@@ -11,7 +11,8 @@ const sizeContent = ref([]);
 const typeContent = ref([]);
 const timeContent = ref([])
 
-const { ingredients } = inject('box')
+const { ingForPizza } = inject('box')
+const { modelOpen } = inject('model')
 
 const fetchFilterButton = async () => {
   try {
@@ -48,18 +49,22 @@ const newValButton = () => {
 }
 
 const addIng = (item) => {
-  ingredients.map(itm => {
+  ingForPizza.value = ingForPizza.value.map(itm => {
     if (item.id === itm.id) {
       return {
         ...itm,
-        isAdded: true,
+        isAdded: !item.isAdded,
       };
 
     } else {
       return itm;
     }
   })
-  console.log(ingredients.value, 1321321321)
+  console.log(ingForPizza.value, 1321321321)
+}
+
+const closeModal = () => {
+  modelOpen.value = !modelOpen.value
 }
 
 provide('button', {
@@ -76,9 +81,15 @@ onMounted(fetchFilterButton)
 </script>
 
 <template>
-  <div class="fixed z-50 w-full h-full bg-black opacity-30">
+  <div class="fixed z-20 w-full h-full bg-black opacity-50">
   </div>
-  <div class="fixed flex z-50 w-full h-full max-h-[650px] max-w-screen-lg top-1/2 left-1/2 bg-white shadow-xl transform -translate-x-1/2 -translate-y-1/2 rounded-2xl overflow-hidden">
+  <div class="fixed w-full h-full max-h-[650px] max-w-screen-xl z-20 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+    <div @click="closeModal" class="fixed group cursor-pointer top-0 right-16 w-10 h-10">
+      <span class="absolute w-7 border-b border-2 border-white right-5 top-6 rotate-45 group-hover:border-slate-100 group-hover:scale-x-125 transtion duration-200"></span>
+      <span class="absolute w-7 border-b border-2 border-white right-5 top-6 -rotate-45 group-hover:border-slate-100 group-hover:scale-x-125 transtion duration-200"></span>
+    </div>
+  </div>
+  <div class="fixed flex z-20 w-full h-full max-h-[650px] max-w-screen-lg top-1/2 left-1/2 bg-white shadow-xl transform -translate-x-1/2 -translate-y-1/2 rounded-2xl overflow-hidden">
     <div class="w-1/2 h-full px-10 flex items-center justify-center">
       <img width="100%" src="/public/assets/items/1.png" alt="">
     </div>
@@ -95,7 +106,7 @@ onMounted(fetchFilterButton)
           </div>
         </div>
         <div class="relative">
-          <IngItemList :items="ingredients" @add-ing="addIng"/>
+          <IngItemList :items="ingForPizza" @add-ing="addIng"/>
           <div class="fixed flex justify-center bottom-0 py-5 px-8 bg-slate-50 w-1/2">
             <button class="bg-orange-500 text-white font-bold py-4 w-full rounded-2xl">Добавить в корзину за 799 Р</button>
         </div>
