@@ -1,15 +1,17 @@
 <script setup>
-import { onMounted, provide, ref, watch } from 'vue';
+import { onMounted, provide, ref, watch, inject } from 'vue';
 
 import axios, { all } from 'axios';
 
 import ButtonFilter from './ButtonFilter.vue';
-import IngItem from './IngItem.vue';
+import IngItemList from './IngItemList.vue';
 
 const allContent = ref([])
 const sizeContent = ref([]);
 const typeContent = ref([]);
 const timeContent = ref([])
+
+const { ingredients } = inject('box')
 
 const fetchFilterButton = async () => {
   try {
@@ -45,6 +47,21 @@ const newValButton = () => {
   console.log(sizeContent.value, 213123213)
 }
 
+const addIng = (item) => {
+  ingredients.map(itm => {
+    if (item.id === itm.id) {
+      return {
+        ...itm,
+        isAdded: true,
+      };
+
+    } else {
+      return itm;
+    }
+  })
+  console.log(ingredients.value, 1321321321)
+}
+
 provide('button', {
   allContent,
   sizeContent,
@@ -61,21 +78,29 @@ onMounted(fetchFilterButton)
 <template>
   <div class="fixed z-50 w-full h-full bg-black opacity-30">
   </div>
-  <div class="fixed flex z-50 w-full h-full max-h-[800px] max-w-screen-lg top-1/2 left-1/2 bg-white shadow-xl transform -translate-x-1/2 -translate-y-1/2 rounded-2xl overflow-hidden">
+  <div class="fixed flex z-50 w-full h-full max-h-[650px] max-w-screen-lg top-1/2 left-1/2 bg-white shadow-xl transform -translate-x-1/2 -translate-y-1/2 rounded-2xl overflow-hidden">
     <div class="w-1/2 h-full px-10 flex items-center justify-center">
       <img width="100%" src="/public/assets/items/1.png" alt="">
     </div>
-    <div class="flex flex-col gap-3 py-9 bg-slate-50 w-1/2 px-7">
-      <h2 class="font-extrabold text-2xl">Сырная</h2>
-      <span class="text-gray-400">40 см, тонкая пицца</span>
-      <ButtonFilter :content-item="sizeContent" @content-func="onOrOff" />
-      <div>
-        <button></button>
-        <button></button>
-        <button></button>
+    <div class="w-1/2">
+      <div class="flex flex-col gap-1 py-9 bg-slate-50 h-full  overflow-hidden overflow-y-scroll">
+        <div class="flex flex-col px-7 gap-2">
+          <div class="flex flex-col gap-1">
+            <h2 class="font-extrabold text-2xl">Сырная</h2>
+            <span class="text-gray-400 mb-4">40 см, тонкая пицца</span>
+          </div>
+          <div class="flex flex-col gap-5">
+            <ButtonFilter :content-item="sizeContent" @content-func="onOrOff" :count="3"/>
+            <ButtonFilter :content-item="typeContent" @content-func="onOrOff" />
+          </div>
+        </div>
+        <div class="relative">
+          <IngItemList :items="ingredients" @add-ing="addIng"/>
+          <div class="fixed flex justify-center bottom-0 py-5 px-8 bg-slate-50 w-1/2">
+            <button class="bg-orange-500 text-white font-bold py-4 w-full rounded-2xl">Добавить в корзину за 799 Р</button>
+        </div>
+        </div>
       </div>
-      <IngItem />
-      <button></button>
     </div>
   </div>
 </template>

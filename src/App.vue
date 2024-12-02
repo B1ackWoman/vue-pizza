@@ -119,7 +119,6 @@ const fetchFilter = async () => {
     ingredients.value = data.filter(filter => filter.class === 'ingredients')
     type.value = data.filter(filter => filter.class === 'type')
     ingredientsFilter.value = ingredients.value.map(ing => ing.text)
-    console.log(ingredientsFilter.value)
   } catch (err) {
     console.log(err)
   }
@@ -173,17 +172,17 @@ onMounted(async () => {
         <MyHeader />
       </div>
     </div>
-    <div class="sticky top-0 z-30 bg-white flex flex-col items-center">
+    <div class="bg-white flex flex-col items-center">
       <div class="w-full max-w-screen-xl px-10">
-      <h2 class="sticky font-extrabold text-3xl">Все пиццы</h2>
+      <h2 class="font-extrabold text-3xl">Все пиццы</h2>
       </div>
     </div>
     <div class="sticky top-0 z-45 bg-white flex flex-col items-center border-b shadow-md rounded-xl">
-      <div class="w-full max-w-screen-xl px-10 py-6">
+      <div class="w-full max-w-screen-xl px-10 py-6 bg-white">
         <NavPanel :content-list="0" />
       </div>
     </div>
-    <div class="flex flex-col justify-center items-center w-full h-full py-7 px-7">
+    <div :style="{zIndex: -1}" class="relative flex flex-col justify-center items-center w-full h-full py-7 px-7">
       <div class="w-full h-full bg-white rounded-2xl max-w-screen-xl">
           <div class="flex py-10 px-10 gap-20">
             <div class="w-min">

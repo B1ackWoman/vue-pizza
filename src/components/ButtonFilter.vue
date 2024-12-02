@@ -2,7 +2,8 @@
 import { ref, inject } from 'vue'
 
 defineProps ({
-  contentItem: Array
+  contentItem: Array,
+  count: Number,
 })
 
 
@@ -12,7 +13,12 @@ const emit = defineEmits(['contentFunc'])
 
 <template>
   <div
-   class="grid grid-cols-3 grid-rows-1 rounded-2xl bg-slate-100 gap-1">
+    class="grid-cols-2 rounded-2xl bg-slate-100 gap-1"
+    :style="{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(' + count + ', minmax(0, 1fr))'
+    }"
+  >
     <button
       v-for="item in contentItem"
       :key="item.id"
