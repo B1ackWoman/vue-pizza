@@ -14,9 +14,9 @@ const emit = defineEmits(['openModel'])
 </script>
 
 <template>
-  <div class="h-full flex flex-col">
+  <div @click="emit('openModel')" class="h-full flex flex-col">
     <div class="flex justify-center py-5 bg-orange-50 rounded-2xl">
-      <img :src="imageUrl" alt="">
+      <img class="hover:-translate-y-10 transition duration-200" :src="imageUrl" alt="">
     </div>
     <div class="flex flex-col justify-between flex-grow">
       <div class="my-4">
@@ -25,7 +25,7 @@ const emit = defineEmits(['openModel'])
       </div>
       <div class="flex justify-between items-center">
         <span class="text-2xl">от <b>{{ price }} ₽</b></span>
-        <button @click="emit('openModel')" class="flex bg-orange-50 py-2 px-3 rounded-xl">
+        <button class="flex bg-orange-50 py-2 px-3 rounded-xl">
           <img :src="before" alt="">
           <span class="text-orange-400 text-xl font-bold" >{{ content }}</span>
         </button>

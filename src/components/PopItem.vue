@@ -5,10 +5,13 @@ import axios, { all } from 'axios';
 
 import ButtonFilter from './ButtonFilter.vue';
 import IngItemList from './IngItemList.vue';
+import debounce from 'debounce';
 
 defineProps({
   item: Object,
 })
+
+const modelOpenTrans = ref(false)
 
 const allContent = ref([])
 const sizeContent = ref([]);
@@ -19,6 +22,21 @@ const summPriceList = ref([])
 
 const { ingForPizza } = inject('box')
 const { modelOpen } = inject('model')
+
+
+const debounceModel = debounce(() => {
+  modelOpenTrans.value = true
+  console.log(1000)
+}, 200)
+
+const debounceM = debounce(() => {}, 1000)
+
+const closeDebounce = debounce(() => {closeModal()}, 200)
+
+const allClose = () => {
+  modelOpenTrans.value = false
+  closeDebounce()
+}
 
 const fetchFilterButton = async () => {
   try {
@@ -84,7 +102,7 @@ const addIng = (item) => {
 }
 
 const closeModal = () => {
-  modelOpen.value = !modelOpen.value
+  modelOpen.value = false
   document.body.style.overflow = ''
 }
 
@@ -102,6 +120,10 @@ watch(summPriceList, async () => {
   summPrices()
 }, { deep: true })
 
+watch(modelOpen, () => {
+  debounceModel()
+})
+
 onMounted(fetchFilterButton)
 </script>
 
@@ -109,12 +131,14 @@ onMounted(fetchFilterButton)
   <div class="fixed z-20 w-full h-full bg-black opacity-50">
   </div>
   <div class="fixed w-full h-full max-h-[650px] max-w-screen-xl z-20 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-    <div @click="closeModal" class="fixed group cursor-pointer top-0 right-16 w-10 h-10">
+    <div @click="allClose" class="fixed group cursor-pointer top-0 right-16 w-10 h-10">
       <span class="absolute w-7 border-b border-2 border-white right-5 top-6 rotate-45 group-hover:border-slate-100 group-hover:scale-x-125 transtion duration-200"></span>
       <span class="absolute w-7 border-b border-2 border-white right-5 top-6 -rotate-45 group-hover:border-slate-100 group-hover:scale-x-125 transtion duration-200"></span>
     </div>
   </div>
-  <div class="fixed flex z-20 w-full h-full max-h-[650px] max-w-screen-lg top-1/2 left-1/2 bg-white shadow-xl transform -translate-x-1/2 -translate-y-1/2 rounded-2xl overflow-hidden">
+  <div class="fixed flex z-20 w-full h-full max-h-[650px] max-w-screen-lg top-1/2 left-1/2 bg-white shadow-xl transform -translate-x-1/2 translate-y-1/3 rounded-2xl overflow-hidden opacity-100 transition duration-100"
+    :class="modelOpenTrans ? 'translate-y-[-50%] opacity-100' : 'translate-y-[100%] opacity-10'"
+  >
     <div class="w-1/2 h-full px-10 flex items-center justify-center">
       <img width="100%" :src="item.imageUrl" alt="">
     </div>
