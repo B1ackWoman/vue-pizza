@@ -6,10 +6,16 @@ import axios, { all } from 'axios';
 import ButtonFilter from './ButtonFilter.vue';
 import IngItemList from './IngItemList.vue';
 
+defineProps({
+  item: Object,
+})
+
 const allContent = ref([])
 const sizeContent = ref([]);
 const typeContent = ref([]);
-const timeContent = ref([])
+
+let summPrice = ref(0)
+const summPriceList = ref([])
 
 const { ingForPizza } = inject('box')
 const { modelOpen } = inject('model')
@@ -42,6 +48,13 @@ const onOrOff = (item) => {
   console.log(allContent.value)
 }
 
+const summPrices = () => {
+  summPrice.value = summPriceList.value.length !== 0
+                  ? summPriceList.value.map(itm => itm.price).reduce((acc, curr) => acc + curr)
+                  : 0
+  console.log(summPrice)
+}
+
 const newValButton = () => {
   sizeContent.value = allContent.value.filter(itm => itm.class === 'size' )
   typeContent.value = allContent.value.filter(itm => itm.class === 'type')
@@ -49,22 +62,30 @@ const newValButton = () => {
 }
 
 const addIng = (item) => {
+  if (!item.isAdded) {
+    summPriceList.value.push(item)
+  } else {
+    summPriceList.value = summPriceList.value.filter(itm => itm.id !== item.id)
+    console.log(summPriceList.value)
+  }
   ingForPizza.value = ingForPizza.value.map(itm => {
     if (item.id === itm.id) {
       return {
         ...itm,
         isAdded: !item.isAdded,
       };
-
     } else {
       return itm;
     }
+
+
   })
   console.log(ingForPizza.value, 1321321321)
 }
 
 const closeModal = () => {
   modelOpen.value = !modelOpen.value
+  document.body.style.overflow = ''
 }
 
 provide('button', {
@@ -75,6 +96,10 @@ provide('button', {
 
 watch(allContent, async () => {
   newValButton()
+}, { deep: true })
+
+watch(summPriceList, async () => {
+  summPrices()
 }, { deep: true })
 
 onMounted(fetchFilterButton)
@@ -91,13 +116,13 @@ onMounted(fetchFilterButton)
   </div>
   <div class="fixed flex z-20 w-full h-full max-h-[650px] max-w-screen-lg top-1/2 left-1/2 bg-white shadow-xl transform -translate-x-1/2 -translate-y-1/2 rounded-2xl overflow-hidden">
     <div class="w-1/2 h-full px-10 flex items-center justify-center">
-      <img width="100%" src="/public/assets/items/1.png" alt="">
+      <img width="100%" :src="item.imageUrl" alt="">
     </div>
     <div class="w-1/2">
       <div class="flex flex-col gap-1 py-9 bg-slate-50 h-full  overflow-hidden overflow-y-scroll">
         <div class="flex flex-col px-7 gap-2">
           <div class="flex flex-col gap-1">
-            <h2 class="font-extrabold text-2xl">Сырная</h2>
+            <h2 class="font-extrabold text-2xl">{{ item.name }}</h2>
             <span class="text-gray-400 mb-4">40 см, тонкая пицца</span>
           </div>
           <div class="flex flex-col gap-5">
@@ -108,7 +133,7 @@ onMounted(fetchFilterButton)
         <div class="relative">
           <IngItemList :items="ingForPizza" @add-ing="addIng"/>
           <div class="fixed flex justify-center bottom-0 py-5 px-8 bg-slate-50 w-1/2">
-            <button class="bg-orange-500 text-white font-bold py-4 w-full rounded-2xl">Добавить в корзину за 799 Р</button>
+            <button class="bg-orange-500 text-white font-bold py-4 w-full rounded-2xl">Добавить в корзину за {{ summPrice }} Р</button>
         </div>
         </div>
       </div>

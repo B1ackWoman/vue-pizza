@@ -1,4 +1,5 @@
 <script setup>
+import { inject } from 'vue';
 import MyCard from './MyCard.vue';
 
 defineProps ({
@@ -6,6 +7,15 @@ defineProps ({
   content: String,
   title: String,
 })
+
+const { itemTime, modelOpen } = inject('model')
+
+const openModel = (item) => {
+  modelOpen.value = !modelOpen.value
+  document.body.style.overflow = 'hidden'
+  itemTime.value = item
+}
+
 </script>
 
 <template>
@@ -19,6 +29,7 @@ defineProps ({
       :image-url="item.imageUrl"
       :discription="item.discription"
       :price="item.price"
+      @openModel="openModel(item)"
     />
   </div>
 </template>

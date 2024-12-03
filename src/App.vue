@@ -7,7 +7,8 @@ import NavPanel from './components/NavPanel.vue';
 import FilterAll from './components/FilterAll.vue'
 import PopItem from './components/PopItem.vue';
 
-const modalOpen = ref(false)
+let modelOpen = ref(false)
+let itemTime = ref([])
 
 const items = ref([])
 const itemsTime = ref([])
@@ -40,14 +41,6 @@ const type = ref([])
 
 const typeTime = ref([])
 
-
-const modalOpenClose = () => {
-  if (modalOpen.value) {
-    document.body.style.overflow = 'hidden'
-  } else {
-    document.body.style.overflow = ''
-  }
-}
 
 const haveValue = () => {
   value1.value = minPrice.value
@@ -110,6 +103,7 @@ const fetchItems = async () => {
     cocktails.value = itemsTime.value.filter(fil => fil.class === 'cocktails')
     drinks.value = itemsTime.value.filter(fil => fil.class === 'drinks')
     haveValue()
+
   } catch (err) {
     console.log(err)
   }
@@ -130,7 +124,7 @@ const fetchFilter = async () => {
     const { data } = await axios.get('https://67184dbcb9589601.mokky.dev/filters')
     size.value = data.filter(filter => filter.class === 'size')
     ingredients.value = data.filter(filter => filter.class === 'ingredients')
-    ingForPizza.value = data.filter(filter => filter.class === 'ingredients')
+    ingForPizza.value = JSON.parse(JSON.stringify(ingredients.value))
     type.value = data.filter(filter => filter.class === 'type')
     ingredientsFilter.value = ingredients.value.map(ing => ing.text)
   } catch (err) {
@@ -139,7 +133,8 @@ const fetchFilter = async () => {
 }
 
 provide('model', {
-  modalOpen
+  modelOpen,
+  itemTime
 })
 
 provide('box', {
@@ -184,7 +179,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <PopItem />
+  <div v-show="modelOpen">
+    <PopItem :item="itemTime" />
+  </div>
   <div class="relative">
     <div class="flex flex-col items-center border-b mb-6">
       <div class="w-full max-w-screen-xl px-10 py-12">

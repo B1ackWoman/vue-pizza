@@ -9,6 +9,8 @@ defineProps ({
   before: String,
 })
 
+const emit = defineEmits(['openModel'])
+
 </script>
 
 <template>
@@ -23,7 +25,7 @@ defineProps ({
       </div>
       <div class="flex justify-between items-center">
         <span class="text-2xl">от <b>{{ price }} ₽</b></span>
-        <button class="flex bg-orange-50 py-2 px-3 rounded-xl">
+        <button @click="emit('openModel')" class="flex bg-orange-50 py-2 px-3 rounded-xl">
           <img :src="before" alt="">
           <span class="text-orange-400 text-xl font-bold" >{{ content }}</span>
         </button>
