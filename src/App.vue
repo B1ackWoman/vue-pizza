@@ -6,8 +6,11 @@ import MyHeader from './components/MyHeader.vue';
 import NavPanel from './components/NavPanel.vue';
 import FilterAll from './components/FilterAll.vue'
 import PopItem from './components/PopItem.vue';
+import MyDrawer from './components/MyDrawer.vue';
 
 let modelOpen = ref(false)
+const modelOpenTrans = ref(false)
+
 let itemTime = ref([])
 
 const items = ref([])
@@ -154,6 +157,10 @@ provide('filter', {
   value2
 })
 
+provide('modelTr', {
+  modelOpenTrans
+})
+
 watch(filterTime, async () => {
   filterPizza()
 }, { deep: true })
@@ -179,6 +186,9 @@ onMounted(async () => {
 </script>
 
 <template>
+  <div>
+    <MyDrawer />
+  </div>
   <div v-show="modelOpen">
     <PopItem :item="itemTime" />
   </div>

@@ -1,5 +1,8 @@
 <script setup>
 import { inject } from 'vue';
+
+import debounce from 'debounce';
+
 import MyCard from './MyCard.vue';
 
 defineProps ({
@@ -9,11 +12,19 @@ defineProps ({
 })
 
 const { itemTime, modelOpen } = inject('model')
+const { modelOpenTrans } = inject('modelTr')
+
+const debounceOpen = (debounce(() => {
+  modelOpenTrans.value = true
+}, 300))
+
 
 const openModel = (item) => {
   modelOpen.value = !modelOpen.value
   document.body.style.overflow = 'hidden'
   itemTime.value = item
+  modelOpenTrans.value = false
+  debounceOpen()
 }
 
 </script>
