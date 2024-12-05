@@ -36,6 +36,8 @@ const value2 = ref()
 
 const filterTime = ref([])
 const filterTimeSize = ref([])
+const timeSize = ref(60)
+
 const filterTimeType = ref([])
 
 const ingredientsFilter = ref([])
@@ -177,7 +179,8 @@ provide('box', {
   ingredients,
   ingForPizza,
   ingForPizzaTime,
-  type
+  type,
+  timeSize
 })
 
 provide('filter', {

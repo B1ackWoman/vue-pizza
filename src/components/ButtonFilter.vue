@@ -26,7 +26,7 @@ const emit = defineEmits(['contentFunc'])
       @click="() => emit('contentFunc', item)"
       :class="[
         'py-2 px-7 rounded-2xl transiton duration-300',
-        item.disabled ? '' : 'hover:shadow-md hover:-translate-y-2 hover:bg-white'
+        item.disabled ? 'text-slate-400' : 'hover:shadow-md hover:-translate-y-2 hover:bg-white'
       ]"
       :style="{
         backgroundColor: item.ButtonOnOff ? 'white' : '',

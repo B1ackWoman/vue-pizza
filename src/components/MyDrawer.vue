@@ -31,11 +31,11 @@ const { closeDrawer, openDrawerTrans } = inject('model')
         </div>
         <CardDrawer />
       </div>
-      <div class="flex flex-col gap-4 bg-white py-6 px-4 rounded-t-md ">
+      <div class="flex flex-col gap-4 bg-white py-10 px-6 rounded-t-lg ">
         <div class="flex items-end">
-          <span class="py-0 text-slate-400 text-xl">Итого</span>
+          <span class="py-0 text-slate-400 text-lg">Итого</span>
           <div class="w-full border-b border-dashed border-slate-500"></div>
-          <span class="text-nowrap font-bold text-xl">575 Р</span>
+          <span class="text-nowrap font-bold text-lg">575 Р</span>
         </div>
         <ButtonOrder content="Оформить заказ"/>
       </div>

@@ -17,6 +17,9 @@ const sizeContent = ref([]);
 const sizeContentTime = ref([]);
 const typeContent = ref([]);
 
+const timeSizeN = ref(1)
+const timeSize = ref(100)
+
 let summPrice = ref(0)
 const summPriceList = ref([])
 
@@ -57,11 +60,19 @@ const fetchFilterButton = async () => {
 
 const onOrOff = (item) => {
   if (item.class === 'size') {
+    timeSizeN.value = item.realSize == 20
+                    ? 1
+                    : item.realSize == 30
+                    ? 1.24
+                    : 1.47
+    timeSize.value = item.realSize
+    console.log(item.realSize == 30)
     sizeContentTime.value = sizeContentTime.value.map(itm => {
       return {
         ...itm,
         ButtonOnOff: itm.id === item.id ? true : false
       }
+
     })
   } else {
     typeContent.value = typeContent.value.map(itm => {
@@ -135,9 +146,19 @@ const changeContent = () => {
           }
         }
       })
+      timeSize.value = Math.min(...itemTime.value.size.split(', '))
+      timeSizeN.value = timeSizeN.value = timeSize.value == 20
+                        ? 1
+                        : timeSize.value == 30
+                        ? 1.24
+                        : 1.47
+      console.log(timeSize.value)
       sizeContentTime.value = sizeContentTime.value.map(itm => {
         if (itemTime.value.size.split(', ').includes(itm.realSize)) {
-          return itm
+          return {
+            ...itm,
+            ButtonOnOff: itm.realSize == timeSize.value ? true : false
+          }
         } else {
           return {
             ...itm,
@@ -185,18 +206,23 @@ onMounted(fetchFilterButton)
       <span class="absolute w-7 border-b border-2 border-white right-5 top-6 -rotate-45 group-hover:border-slate-100 group-hover:scale-x-125 transtion duration-200"></span>
     </div>
   </div>
-  <div class="fixed flex z-20 w-full h-full max-h-[650px] max-w-screen-lg top-1/2 left-1/2 bg-white shadow-xl transform -translate-x-1/2 rounded-2xl overflow-hidden opacity-100 transition duration-00"
-    :class="modelOpenTrans ? 'translate-y-[-50%] opacity-100 transition duration-100' : 'translate-y-[100%] opacity-0 transition duration-100'"
+  <div class="fixed flex z-20 w-full h-full max-h-[650px] max-w-screen-lg top-1/2 left-1/2 bg-white shadow-xl transform -translate-x-1/2 rounded-2xl overflow-hidden transition duration-00"
+    :class="modelOpenTrans ? 'translate-y-[-50%] opacity-100 transition duration-200' : 'opacity-0 translate-y-[-40%] transition duration-200'"
   >
-    <div class="w-1/2 h-full px-10 flex items-center justify-center">
-      <img width="100%" :src="item.imageUrl" alt="">
+    <div class="relative w-1/2 h-full px-10 flex items-center justify-center">
+      <img :class="'scale-[' + timeSizeN + '] transition duration-200'" width="60%" :src="item.imageUrl" alt="">
+      <div class="absolute z-index-50 border-0 border-dashed rounded-full w-[240px] h-[240px] left-[130px] top-[200px]" ></div>
+      <div :class="['absolute z-index-50 border border-slate-300 border-dashed rounded-full w-[298px] h-[295px] left-[99px] top-[169px]',
+                  timeSizeN == 1.47 ? 'border-0' : ''
+      ]" ></div>
+      <div class="absolute z-index-50 border border-slate-300 border-dashed rounded-full w-[350px] h-[350px] left-[72px] top-[140px]" ></div>
     </div>
     <div class="w-1/2">
       <div class="flex flex-col gap-1 py-9 bg-slate-50 h-full  overflow-hidden overflow-y-scroll">
         <div class="flex flex-col px-7 gap-2">
           <div class="flex flex-col gap-1">
             <h2 class="font-extrabold text-2xl">{{ item.name }}</h2>
-            <span class="text-gray-400 mb-4">40 см, тонкая пицца</span>
+            <span class="text-gray-400 mb-4">{{ timeSize }} см, тонкая пицца</span>
           </div>
           <div class="flex flex-col gap-5">
             <ButtonFilter :content-item="sizeContentTime" @content-func="onOrOff" :count="3"/>
