@@ -7,9 +7,14 @@ import NavPanel from './components/NavPanel.vue';
 import FilterAll from './components/FilterAll.vue'
 import PopItem from './components/PopItem.vue';
 import MyDrawer from './components/MyDrawer.vue';
+import debounce from 'debounce';
 
-let modelOpen = ref(false)
+const modelOpen = ref(false)
 const modelOpenTrans = ref(false)
+const openDrawer = ref(false)
+const openDrawerTrans = ref(false)
+
+const cart = ref([])
 
 let itemTime = ref([])
 
@@ -39,6 +44,7 @@ const size = ref([])
 const ingredients = ref([])
 
 const ingForPizza = ref([])
+const ingForPizzaTime = ref([])
 
 const type = ref([])
 
@@ -70,10 +76,10 @@ const addOrDelIng = (item) => {
 
 const addOrDelType = (item) => {
   item.isAdded = !item.isAdded
-  typeTime.value = (item.id === 12)
-                      ? type.value.filter(types => types.id == 13)
-                      : type.value.filter(types => types.id == 12)
-  if (item.isAdded) {
+  typeTime.value = (item.id === 15)
+                      ? type.value.filter(types => types.id == 16)
+                      : type.value.filter(types => types.id == 15)
+  if (item.isAdded === true) {
     filterTimeType.value.push(item.text)
     filterTimeType.value = filterTimeType.value.filter(itm => itm === item.text)
     typeTime.value[0].isAdded = false
@@ -128,6 +134,7 @@ const fetchFilter = async () => {
     size.value = data.filter(filter => filter.class === 'size')
     ingredients.value = data.filter(filter => filter.class === 'ingredients')
     ingForPizza.value = JSON.parse(JSON.stringify(ingredients.value))
+    ingForPizzaTime.value = JSON.parse(JSON.stringify(ingredients.value))
     type.value = data.filter(filter => filter.class === 'type')
     ingredientsFilter.value = ingredients.value.map(ing => ing.text)
   } catch (err) {
@@ -135,9 +142,31 @@ const fetchFilter = async () => {
   }
 }
 
+const openDrawerFunc = () => {
+  openDrawer.value = !openDrawer.value
+  debounceDrawerOpen()
+}
+
+const closeDrawer = () => {
+  openDrawerTrans.value = !openDrawerTrans.value
+  debounceDrawerClose()
+}
+
+const debounceDrawerOpen = debounce(() => {
+  openDrawerTrans.value = !openDrawerTrans.value
+})
+
+const debounceDrawerClose = debounce(() => {
+  openDrawer.value = !openDrawer.value
+})
+
 provide('model', {
   modelOpen,
-  itemTime
+  itemTime,
+  openDrawer,
+  openDrawerTrans,
+  openDrawerFunc,
+  closeDrawer
 })
 
 provide('box', {
@@ -147,6 +176,7 @@ provide('box', {
   size,
   ingredients,
   ingForPizza,
+  ingForPizzaTime,
   type
 })
 
@@ -186,7 +216,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
+  <div v-show="openDrawer">
     <MyDrawer />
   </div>
   <div v-show="modelOpen">

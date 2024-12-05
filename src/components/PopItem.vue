@@ -11,22 +11,27 @@ defineProps({
   item: Object,
 })
 
-const allContent = ref([])
+const allContent = ref([]);
+const allContentTime = ref([])
 const sizeContent = ref([]);
+const sizeContentTime = ref([]);
 const typeContent = ref([]);
 
 let summPrice = ref(0)
 const summPriceList = ref([])
 
-const { ingForPizza } = inject('box')
+const { ingForPizza, ingForPizzaTime } = inject('box')
 const { modelOpen, itemTime } = inject('model')
 const { modelOpenTrans } = inject('modelTr')
 
 
 const debounceModel = debounce(() => {
+  console.log(summPriceList.value, 22222)
   modelOpenTrans.value = true
-  summPriceList.value.push(itemTime.value)
-  console.log(summPriceList)
+  if (modelOpen.value === true) {
+    summPriceList.value.push(itemTime.value)
+  }
+  console.log(summPriceList.value, 11111)
 }, 200)
 
 const closeDebounce = debounce(() => {closeModal()}, 200)
@@ -40,28 +45,34 @@ const fetchFilterButton = async () => {
   try {
     const { data } = await axios.get('https://67184dbcb9589601.mokky.dev/contentFilter')
     allContent.value = data
-    sizeContent.value = allContent.value.filter(itm => itm.class === 'size' )
+    allContentTime.value = JSON.parse(JSON.stringify(allContent.value))
+    sizeContent.value = allContent.value.filter(itm => itm.class === 'size')
+    sizeContentTime.value = allContentTime.value.filter(itm => itm.class === 'size')
     typeContent.value = allContent.value.filter(itm => itm.class === 'type')
-    console.log(typeContent.value)
-    console.log(sizeContent.value, 1)
+
   } catch (err) {
     console.log(err)
   }
 }
 
 const onOrOff = (item) => {
-  allContent.value = allContent.value.map(itm => {
-    if (itm.class === item.class ) {
+  if (item.class === 'size') {
+    sizeContentTime.value = sizeContentTime.value.map(itm => {
       return {
         ...itm,
         ButtonOnOff: itm.id === item.id ? true : false
-      };
-
-    } else {
-      return itm;
-    }
-  })
-  console.log(allContent.value)
+      }
+    })
+  } else {
+    typeContent.value = typeContent.value.map(itm => {
+      return {
+        ...itm,
+        ButtonOnOff: itm.id === item.id ? true : false
+      }
+    })
+  }
+  console.log(allContentTime.value)
+  console.log(sizeContentTime.value)
 }
 
 const summPrices = () => {
@@ -84,7 +95,7 @@ const addIng = (item) => {
     summPriceList.value = summPriceList.value.filter(itm => itm.id !== item.id)
     console.log(summPriceList.value)
   }
-  ingForPizza.value = ingForPizza.value.map(itm => {
+  ingForPizzaTime.value = ingForPizzaTime.value.map(itm => {
     if (item.id === itm.id) {
       return {
         ...itm,
@@ -101,8 +112,44 @@ const addIng = (item) => {
 
 const closeModal = () => {
   modelOpen.value = false
+  summPriceList.value = []
+  ingForPizzaTime.value = JSON.parse(JSON.stringify(ingForPizza.value))
+  sizeContentTime.value = allContentTime.value.filter(itm => itm.class === 'size')
+  console.log(ingForPizzaTime.value)
   document.body.style.overflow = ''
   modelOpenTrans.value = true
+}
+
+const changeContent = () => {
+  if (modelOpen.value === true) {
+    typeContent.value = typeContent.value.map(itm => {
+        if (itm.content === itemTime.value.type) {
+          return {
+            ...itm,
+            ButtonOnOff: true
+          }
+        } else {
+          return {
+            ...itm,
+            disabled: true
+          }
+        }
+      })
+      sizeContentTime.value = sizeContentTime.value.map(itm => {
+        if (itemTime.value.size.split(', ').includes(itm.realSize)) {
+          return itm
+        } else {
+          return {
+            ...itm,
+            disabled: true
+          }
+        }
+      })
+      console.log(modelOpen, 3123213213)
+  } else {
+    typeContent.value = allContentTime.value.filter(itm => itm.class === 'type')
+    console.log(typeContent.value, 23131)
+  }
 }
 
 provide('button', {
@@ -120,8 +167,11 @@ watch(summPriceList, async () => {
 }, { deep: true })
 
 watch(modelOpen, () => {
+  changeContent()
   debounceModel()
 })
+
+
 
 onMounted(fetchFilterButton)
 </script>
@@ -149,12 +199,12 @@ onMounted(fetchFilterButton)
             <span class="text-gray-400 mb-4">40 см, тонкая пицца</span>
           </div>
           <div class="flex flex-col gap-5">
-            <ButtonFilter :content-item="sizeContent" @content-func="onOrOff" :count="3"/>
+            <ButtonFilter :content-item="sizeContentTime" @content-func="onOrOff" :count="3"/>
             <ButtonFilter :content-item="typeContent" @content-func="onOrOff" />
           </div>
         </div>
         <div class="relative">
-          <IngItemList :items="ingForPizza" @add-ing="addIng"/>
+          <IngItemList :items="ingForPizzaTime" @add-ing="addIng"/>
           <div class="fixed flex justify-center bottom-0 py-5 px-8 bg-slate-50 w-1/2">
             <button class="bg-orange-500 text-white font-bold py-4 w-full rounded-2xl">Добавить в корзину за {{ summPrice }} Р</button>
         </div>

@@ -14,15 +14,15 @@ import ButtonForDrawer from './ButtonForDrawer.vue';
         <span class="text-xl font-bold">Сырная</span>
         <span class="text-xs text-slate-500">Традиционная 20см, Осрая чиризо</span>
       </div>
-      <div>
+      <div class="flex justify-between items-center">
         <div class="flex gap-4 items-center">
           <ButtonForDrawer content="–"/>
           <span class="font-bold">1</span>
           <ButtonForDrawer content="+" />
         </div>
-        <div>
-          <span></span>
-          <img src="" alt="">
+        <div class="flex gap-2">
+          <span class="font-extrabold">575 Р</span>
+          <img width="18" class="opacity-40 hover:opacity-100 transition" src="/public/assets/images/delete.svg" alt="">
         </div>
       </div>
     </div>

@@ -22,8 +22,12 @@ const emit = defineEmits(['contentFunc'])
     <button
       v-for="item in contentItem"
       :key="item.id"
+      :disabled="item.disabled"
       @click="() => emit('contentFunc', item)"
-      class="py-2 px-7 rounded-2xl hover:bg-white hover:shadow-md hover:-translate-y-2 transiton duration-300"
+      :class="[
+        'py-2 px-7 rounded-2xl transiton duration-300',
+        item.disabled ? '' : 'hover:shadow-md hover:-translate-y-2 hover:bg-white'
+      ]"
       :style="{
         backgroundColor: item.ButtonOnOff ? 'white' : '',
         boxShadow: item.ButtonOnOff ? '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)' : '',

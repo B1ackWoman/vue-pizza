@@ -1,4 +1,5 @@
 <script setup>
+import { inject } from 'vue';
 
 defineProps ({
   money: Number,
@@ -6,10 +7,12 @@ defineProps ({
   imageUrl: String,
 })
 
+const { openDrawerFunc } = inject('model')
+
 </script>
 
 <template>
-  <div class="group relative cursor-pointer flex bg-orange-500 text-white px-4 py-2 items-center rounded-2xl transition hover:opacity-95">
+  <div @click="openDrawerFunc" class="group relative cursor-pointer flex bg-orange-500 text-white px-4 py-2 items-center rounded-2xl transition hover:opacity-95">
     <b class="pr-3">{{ money }} ₽</b>
     <span class="w-1 h-full border-r border-orange-400"></span>
     <div class="flex pl-3 items-center group-hover:opacity-10 transtion duration-200">
