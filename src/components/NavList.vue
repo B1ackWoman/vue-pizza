@@ -5,6 +5,7 @@ import MyNav from './MyNav.vue';
 import { onMounted, ref } from 'vue';
 
 const navItems = ref([]);
+const element = ref()
 
 const fetchNav = async () => {
   try {
@@ -30,7 +31,15 @@ const isActiveFunc = (item) => {
       }
     }
   })
+  element.value = document.getElementById(item.name)
+  if (element.value) {
+    element.value.scrollIntoView({
+      behavior: 'smooth',
+    })
+  }
+  console.log(item.name)
 }
+
 
 
 onMounted(fetchNav)

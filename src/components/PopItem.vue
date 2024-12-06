@@ -211,7 +211,7 @@ onMounted(fetchFilterButton)
 <template>
   <div @click="allClose" class="fixed z-20 w-full h-full bg-black opacity-50">
   </div>
-  <div class="fixed w-full h-full max-h-[650px] max-w-screen-xl z-20 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+  <div @click="allClose" class="fixed w-full h-full max-h-[650px] max-w-screen-xl z-20 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
     <div @click="allClose" class="fixed group cursor-pointer top-0 right-16 w-10 h-10">
       <span class="absolute w-7 border-b border-2 border-white right-5 top-6 rotate-45 group-hover:border-slate-100 group-hover:scale-x-125 transtion duration-200"></span>
       <span class="absolute w-7 border-b border-2 border-white right-5 top-6 -rotate-45 group-hover:border-slate-100 group-hover:scale-x-125 transtion duration-200"></span>

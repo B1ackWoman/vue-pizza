@@ -1,13 +1,31 @@
 <script setup>
+import { inject, ref } from 'vue';
 import ButtonForDrawer from './ButtonForDrawer.vue';
+import debounce from 'debounce';
 
 defineProps ({
-  item: Array,
+  item: Object,
 })
+
+const animateCardDel = ref()
+
+const debounceForAll = debounce((item) => {
+  cart.value = cart.value.filter(itm => itm.id !== item.id)
+}, 300)
+
+const { cart } = inject('cart')
+
+const cartDelItem = (item) => {
+  animateCardDel.value = item.id
+  debounceForAll(item)
+}
+
 </script>
 
 <template>
-  <div class="flex bg-white rounded-xl shadow-md mx-4 px-4 py-4 gap-4">
+  <div :class="['flex bg-white rounded-xl shadow-md mx-4 px-4 py-4 gap-4 transition duration-300 transform',
+                animateCardDel === item.id ? '-translate-x-3 opacity-0' : ''
+  ]">
     <div>
       <img width="80" :src="item.imageUrl" alt="">
     </div>
@@ -24,7 +42,7 @@ defineProps ({
         </div>
         <div class="flex gap-2">
           <span class="font-extrabold">{{ item.price }} Р</span>
-          <img width="18" class="opacity-40 hover:opacity-100 transition" src="/public/assets/images/delete.svg" alt="">
+          <img @click="cartDelItem(item)" width="18" class="opacity-40 hover:opacity-100 transition" src="/public/assets/images/delete.svg" alt="">
         </div>
       </div>
     </div>

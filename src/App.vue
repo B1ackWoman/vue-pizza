@@ -252,11 +252,11 @@ onMounted(async () => {
               <FilterAll />
             </div>
             <div>
-              <CardList title="Пиццы" content="+ Добавить" :items="pizzaTime" />
-              <CardList title="Завтрак" content="+ Добавить" :items="breakfast" />
-              <CardList title="Закуски" content="+ Добавить" :items="snacks" />
-              <CardList title="Коктели" content="+ Добавить" :items="cocktails" />
-              <CardList title="Напитки" content="+ Добавить" :items="drinks" />
+              <CardList id="Пиццы" title="Пиццы" content="+ Добавить" :items="pizzaTime" />
+              <CardList id="Завтрак" title="Завтрак" content="+ Добавить" :items="breakfast" />
+              <CardList id="Закуски" title="Закуски" content="+ Добавить" :items="snacks" />
+              <CardList id="Коктели" title="Коктели" content="+ Добавить" :items="cocktails" />
+              <CardList id="Напитки" title="Напитки" content="+ Добавить" :items="drinks" />
             </div>
           </div>
       </div>

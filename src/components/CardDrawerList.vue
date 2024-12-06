@@ -10,10 +10,24 @@ defineProps({
 </script>
 
 <template>
-  <div class="grid grid-cols-1 gap-4">
+  <transition-group
+    class="grid grid-cols-1 gap-4"
+    tag="div"
+    name="cardList"
+  >
     <CardDrawer v-for="item in items"
-     :key="item.id"
-     :item="item"
+    :key="item.id"
+    :item="item"
     />
-  </div>
+  </transition-group>
 </template>
+
+
+<style>
+
+.cardList-leave-active {
+  transition: all, 0.3s, ease;
+  position: absolute;
+}
+
+</style>
