@@ -2,9 +2,9 @@
 import { inject } from 'vue';
 
 import ButtonOrder from './ButtonOrder.vue';
-import CardDrawer from './CardDrawer.vue';
+import CardDrawerList from './CardDrawerList.vue';
 
-
+const { cart } = inject('cart')
 const { closeDrawer, openDrawerTrans } = inject('model')
 
 </script>
@@ -29,7 +29,7 @@ const { closeDrawer, openDrawerTrans } = inject('model')
             <span class="absolute w-4 border-b border-1 border-black right-1 top-3 -rotate-45  group-hover:scale-x-125 transtion duration-200"></span>
           </div>
         </div>
-        <CardDrawer />
+        <CardDrawerList :items="cart" />
       </div>
       <div class="flex flex-col gap-4 bg-white py-10 px-6 rounded-t-lg ">
         <div class="flex items-end">

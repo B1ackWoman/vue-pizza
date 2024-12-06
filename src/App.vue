@@ -162,6 +162,10 @@ const debounceDrawerClose = debounce(() => {
   openDrawer.value = !openDrawer.value
 })
 
+provide('cart', {
+  cart
+})
+
 provide('model', {
   modelOpen,
   itemTime,
