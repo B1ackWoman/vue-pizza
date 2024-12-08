@@ -40,8 +40,6 @@ const isActiveFunc = (item) => {
   console.log(item.name)
 }
 
-
-
 onMounted(fetchNav)
 </script>
 

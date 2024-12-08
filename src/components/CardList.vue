@@ -23,7 +23,7 @@ const debounceOpen = (debounce(() => {
 const openModel = (item) => {
   modelOpen.value = !modelOpen.value
   document.body.style.overflow = 'hidden'
-  itemTime.value = item
+  itemTime.value = JSON.parse(JSON.stringify(item))
   modelOpenTrans.value = false
   debounceOpen()
 }
@@ -34,7 +34,7 @@ const openModel = (item) => {
   <h2 :id="id" class="text-3xl font-extrabold mb-4"
     style="scroll-margin-top: 120px"
   >{{ title }}</h2>
-  <div class="grid grid-cols-3 gap-10 mb-20">
+  <div class="grid grid-cols-3 gap-10 mb-20" v-auto-animate>
     <MyCard
       v-for="item in items"
       :key="item.id"
@@ -43,6 +43,7 @@ const openModel = (item) => {
       :image-url="item.imageUrl"
       :discription="item.discription"
       :price="item.price"
+      :id="item.id"
       @openModel="openModel(item)"
     />
   </div>

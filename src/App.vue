@@ -16,7 +16,9 @@ const openDrawerTrans = ref(false)
 
 const cart = ref([])
 
-let itemTime = ref([])
+const allPrice = ref(0)
+
+const itemTime = ref([])
 
 const items = ref([])
 const itemsTime = ref([])
@@ -162,8 +164,17 @@ const debounceDrawerClose = debounce(() => {
   openDrawer.value = !openDrawer.value
 })
 
+const changePrice = () => {
+  console.log(cart.value.length)
+  allPrice.value = cart.value.map(itm => itm.price).reduce((acc, cur) => acc + cur, 0)
+}
+
+
+
+
 provide('cart', {
-  cart
+  cart,
+  allPrice
 })
 
 provide('model', {
@@ -206,19 +217,22 @@ watch(filterTimeSize, filterPizza, { deep: true })
 
 watch(filterTimeType, filterPizza, { deep: true })
 
-watch(value1, async () => {
+watch(value1.value, () => {
   newItems()
-}, { deep: true })
+})
 
-watch(value2,async () => {
+watch(value2.value, () => {
   newItems()
+})
+
+watch(cart, () => {
+  changePrice()
 }, { deep: true })
 
 onMounted(async () => {
   fetchItems()
   fetchFilter()
 })
-
 
 </script>
 
@@ -230,29 +244,24 @@ onMounted(async () => {
     <PopItem :item="itemTime" />
   </div>
   <div class="relative">
-    <div class="flex flex-col items-center border-b mb-6">
-      <div class="w-full max-w-screen-xl px-10 py-12">
+    <div class="flex flex-col items-center border-b ">
+      <div class="w-full max-w-screen-xl py-10">
         <MyHeader />
       </div>
     </div>
-    <div class="bg-white flex flex-col items-center">
-      <div class="w-full max-w-screen-xl px-10">
-      <h2 class="font-extrabold text-3xl">Все пиццы</h2>
-      </div>
-    </div>
     <div  class="sticky top-0 z-10 bg-white flex flex-col items-center border-b shadow-md rounded-xl">
-      <div class="w-full max-w-screen-xl px-10 py-6 bg-white">
-        <NavPanel :content-list="0" />
+      <div class="w-full max-w-screen-xl py-6 bg-white">
+        <NavPanel :amount="cart.length" :content-list="0" />
       </div>
     </div>
     <div :style="{zIndex: 0}" class="relative flex flex-col justify-center items-center w-full h-full py-7 px-7">
       <div class="w-full h-full bg-white rounded-2xl max-w-screen-xl">
-          <div class="flex py-10 px-10 gap-20">
+          <div class="flex py-10 gap-20">
             <div class="w-min">
               <FilterAll />
             </div>
             <div>
-              <CardList id="Пиццы" title="Пиццы" content="+ Добавить" :items="pizzaTime" />
+              <CardList ref="pizza" id="Пиццы" title="Пиццы" content="+ Добавить" :items="pizzaTime" />
               <CardList id="Завтрак" title="Завтрак" content="+ Добавить" :items="breakfast" />
               <CardList id="Закуски" title="Закуски" content="+ Добавить" :items="snacks" />
               <CardList id="Коктели" title="Коктели" content="+ Добавить" :items="cocktails" />

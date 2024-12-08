@@ -30,7 +30,7 @@ const inputValue2 = (event) => {
       </div>
       <div class="relative">
         <img id="imgTwo" class="absolute right-2 top-3" src="/public/assets/images/rub.png" alt="">
-        <input class="w-24 border text-black  py-2 px-2 rounded-xl focus:outline-none" type="text" v-model="value2" @input="inputValue2">
+        <input class="w-24 border text-black  py-2 px-2 rounded-xl focus:outline-none" type="text" :placeholder="value2" @input="inputValue2">
       </div>
     </div>
   </div>

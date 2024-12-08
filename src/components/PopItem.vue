@@ -1,15 +1,20 @@
 <script setup>
-import { onMounted, provide, ref, watch, inject } from 'vue';
+import { onMounted, provide, ref, watch, inject, nextTick } from 'vue';
 
 import axios, { all } from 'axios';
 
 import ButtonFilter from './ButtonFilter.vue';
 import IngItemList from './IngItemList.vue';
 import debounce from 'debounce';
+import js from '@eslint/js';
 
 defineProps({
   item: Object,
 })
+
+const modelItem = ref()
+
+const counterId = ref(0)
 
 const allContent = ref([]);
 const allContentTime = ref([])
@@ -125,13 +130,19 @@ const addIng = (item) => {
 }
 
 const closeModal = () => {
+  if (modelItem.value) {
+    modelItem.value.scrollTop = 0
+  }
   modelOpen.value = false
+  console.log(modelItem.value)
   summPriceList.value = []
   ingForPizzaTime.value = JSON.parse(JSON.stringify(ingForPizza.value))
   sizeContentTime.value = allContentTime.value.filter(itm => itm.class === 'size')
   console.log(ingForPizzaTime.value)
   document.body.style.overflow = ''
   modelOpenTrans.value = true
+
+
 }
 
 const changeContent = () => {
@@ -174,9 +185,14 @@ const changeContent = () => {
 }
 
 const addToCart = () => {
+  itemTime.value.realId = counterId.value
+  counterId.value++
   itemTime.value.allIng = summPriceList.value.filter(itm => itm.class === 'ingredients').map(itm => itm.text)
   itemTime.value.needSize = timeSize.value
   itemTime.value.price = summPrice.value
+  itemTime.value.realPrice = summPrice.value
+  itemTime.value.count = 1
+  itemTime.value.disabled = true
   console.log(Array.isArray(itemTime.value))
   cart.value.push(itemTime.value)
   console.log(cart.value, 1)
@@ -228,16 +244,18 @@ onMounted(fetchFilterButton)
       >
       <div class="absolute z-index-50 border-0 border-dashed rounded-full w-[240px] h-[240px] left-[130px] top-[200px]" ></div>
       <div :class="['absolute z-index-50 border border-slate-300 border-dashed rounded-full w-[298px] h-[295px] left-[99px] top-[169px]',
-                  timeSizeN == 1.47 ? 'border-0' : ''
+                  timeSizeN !== 1 ? 'opacity-0 transition duration-300' : ''
       ]" ></div>
-      <div class="absolute z-index-50 border border-slate-300 border-dashed rounded-full w-[350px] h-[350px] left-[72px] top-[140px]" ></div>
+      <div :class="['absolute z-index-50 border border-slate-300 border-dashed rounded-full w-[350px] h-[350px] left-[72px] top-[140px]',
+                    timeSizeN === 1.47 ? 'opacity-0 transition duration-300' : ''
+      ]" ></div>
     </div>
     <div class="w-1/2">
-      <div class="flex flex-col gap-1 py-9 bg-slate-50 h-full  overflow-hidden overflow-y-scroll">
+      <div ref="modelItem" class="flex flex-col gap-1 py-9 bg-slate-50 h-full  overflow-hidden overflow-y-scroll">
         <div class="flex flex-col px-7 gap-2">
           <div class="flex flex-col gap-1">
             <h2 class="font-extrabold text-2xl">{{ item.name }}</h2>
-            <span class="text-gray-400 mb-4">{{ timeSize }} см, тонкая пицца</span>
+            <span class="text-gray-400 mb-4">{{ timeSize }} см, {{ item.type }} пицца</span>
           </div>
           <div class="flex flex-col gap-5">
             <ButtonFilter :content-item="sizeContentTime" @content-func="onOrOff" :count="3"/>
@@ -247,7 +265,7 @@ onMounted(fetchFilterButton)
         <div class="relative">
           <IngItemList :items="ingForPizzaTime" @add-ing="addIng"/>
           <div class="fixed flex justify-center bottom-0 py-5 px-8 bg-slate-50 w-1/2">
-            <button @click="addToCart" class="bg-orange-500 text-white font-bold py-4 w-full rounded-2xl">Добавить в корзину за {{ summPrice }} Р</button>
+            <button @click="addToCart" class="bg-orange-500 text-white font-bold py-4 w-full rounded-2xl">Добавить в корзину за {{ summPrice }} ₽</button>
         </div>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { inject } from 'vue';
 import ButtonOrder from './ButtonOrder.vue';
 import CardDrawerList from './CardDrawerList.vue';
 
-const { cart } = inject('cart')
+const { cart, allPrice } = inject('cart')
 const { closeDrawer, openDrawerTrans } = inject('model')
 
 </script>
@@ -20,13 +20,15 @@ const { closeDrawer, openDrawerTrans } = inject('model')
     >
       <div>
         <div class="flex justify-between h-10 py-10 px-4 items-center">
-          <div class="text-xl">
+          <div v-show="true" class="text-xl">
             <span class="font-semibold">В корзине </span>
-            <span class="font-bold">3 товара</span>
+            <span class="font-bold">{{ cart.length }} товара</span>
           </div>
-          <div @click="closeDrawer" class="relative group cursor-pointer top-0 right-0 w-10 h-10 ">
-            <span class="absolute w-4 border-b border-1 border-black right-1 top-3 rotate-45  group-hover:scale-x-125 transtion duration-200"></span>
-            <span class="absolute w-4 border-b border-1 border-black right-1 top-3 -rotate-45  group-hover:scale-x-125 transtion duration-200"></span>
+          <div class="flex flex-grow justify-end">
+            <div @click="closeDrawer" class="relative group cursor-pointer top-0 right-0 w-10 h-10 ">
+              <span class="absolute w-4 border-b border-1 border-black right-1 top-3 rotate-45  group-hover:scale-x-125 transtion duration-200"></span>
+              <span class="absolute w-4 border-b border-1 border-black right-1 top-3 -rotate-45  group-hover:scale-x-125 transtion duration-200"></span>
+            </div>
           </div>
         </div>
         <div class="relative" v-auto-animate>
@@ -37,7 +39,7 @@ const { closeDrawer, openDrawerTrans } = inject('model')
         <div class="flex items-end">
           <span class="py-0 text-slate-400 text-lg">Итого</span>
           <div class="w-full border-b border-dashed border-slate-500"></div>
-          <span class="text-nowrap font-bold text-lg">575 Р</span>
+          <span class="text-nowrap font-bold text-lg">{{ allPrice }} ₽</span>
         </div>
         <ButtonOrder content="Оформить заказ"/>
       </div>
