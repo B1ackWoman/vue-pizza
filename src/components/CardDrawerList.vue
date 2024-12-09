@@ -12,7 +12,7 @@ defineProps({
   items: Array,
 })
 
-const { cart } = inject('cart')
+const { cart, animateCard } = inject('cart')
 const animateCardDel = ref()
 
 const debounceForAll = debounce((item) => {
@@ -42,7 +42,10 @@ const countMinus = (item) => {
 
 <template>
   <transition-group
-    class="grid grid-cols-1 gap-4"
+    :class="[
+      'grid grid-cols-1 gap-4 transition duration-300',
+      animateCard === true ? 'opacity-0 -translate-y-5' : 'opacity-100'
+    ]"
     tag="div"
     name="cardList"
   >

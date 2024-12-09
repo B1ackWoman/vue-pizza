@@ -18,7 +18,7 @@ const cart = ref([])
 const order = ref([])
 const animateCard = ref(false)
 
-const animateForDrawer = ref(true)
+const animateForDrawer = ref(false)
 
 const allPrice = ref(0)
 
@@ -59,6 +59,9 @@ const type = ref([])
 
 const typeTime = ref([])
 
+const showInputSearch = ref(false)
+
+const model = ref(false)
 
 const haveValue = () => {
   value1.value = minPrice.value
@@ -185,10 +188,8 @@ const debounceAnimateDrawer = debounce(() => {
 }, 300)
 
 const animateDrawer = () => {
-  animateForDrawer.value = cart.value.length === 0
-                          ? true
-                          : false
-  console.log(animateForDrawer.value)
+  animateForDrawer.value = false
+  animateCard.value = false
 }
 
 const placeOrder = () => {
@@ -202,8 +203,18 @@ const debouncePlaceOrder = debounce(() => {
 }, 300)
 
 const allPlaceOrder = () => {
+  animateCard.value = true
+  animateForDrawer.value = true
   debouncePlaceOrder()
 }
+
+provide('all', {
+  model
+})
+
+provide('input', {
+  showInputSearch
+})
 
 provide('cart', {
   cart,
@@ -276,6 +287,8 @@ onMounted(async () => {
 </script>
 
 <template>
+  <div v-show="model" @click="allClose" class="fixed z-20 w-full h-full bg-black opacity-50">
+  </div>
   <div v-show="openDrawer">
     <MyDrawer />
   </div>
