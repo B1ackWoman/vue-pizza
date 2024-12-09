@@ -21,6 +21,6 @@ const { cart, allPrice } = inject('cart')
       <img class="w-5 h-5 mr-1" width="" :src=imageUrl alt="">
       <b> {{ cart.length }} </b>
     </div>
-    <img class="absolute right-6 w-7 h-8 opacity-10 transtion duration-200 group-hover:opacity-100 group-hover:translate-x-2" src="/public/assets/images/arrowright.png" alt="">
+    <img class="absolute right-6 w-4 h-5 -translate-x-2 opacity-10 transtion duration-200 group-hover:opacity-100 group-hover:translate-x-1" src="/public/assets/images/arrow-right.svg" alt="">
   </div>
 </template>

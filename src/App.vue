@@ -15,6 +15,10 @@ const openDrawer = ref(false)
 const openDrawerTrans = ref(false)
 
 const cart = ref([])
+const order = ref([])
+const animateCard = ref(false)
+
+const animateForDrawer = ref(true)
 
 const allPrice = ref(0)
 
@@ -24,6 +28,7 @@ const items = ref([])
 const itemsTime = ref([])
 
 const pizza = ref([])
+const pizzas = ref ([])
 const pizzaTime = ref([])
 const breakfast = ref([])
 const snacks = ref([])
@@ -58,18 +63,21 @@ const typeTime = ref([])
 const haveValue = () => {
   value1.value = minPrice.value
   value2.value = maxPrice.value
+  console.log(pizza.value, 1231)
 }
 
 const addOrDelSize = (item) => {
   item.isAdded = !item.isAdded
   if (item.isAdded) {
     filterTimeSize.value.push(item.text)
+    console.log(filterTimeSize.value, true)
   } else {
     filterTimeSize.value = filterTimeSize.value.filter(itm => itm !== item.text)
   }
 }
 
 const addOrDelIng = (item) => {
+
   item.isAdded = !item.isAdded
   if (item.isAdded) {
     filterTime.value.push(item.text)
@@ -93,7 +101,8 @@ const addOrDelType = (item) => {
 }
 
 const filterPizza = () => {
-  pizzaTime.value = pizza.value.filter(piz => filterTime.value.every(item => piz.discription.split(', ').includes(item))
+  console.log(pizza, 1)
+  pizzaTime.value = pizzas.value.filter(piz => filterTime.value.every(item => piz.discription.split(', ').includes(item))
   && filterTimeSize.value.every(item => piz.size.split(', ').includes(item))
   && filterTimeType.value.every(item => piz.type.split(', ').includes(item)))
 }
@@ -107,7 +116,8 @@ const fetchItems = async () => {
     const { data } = await axios.get('https://67184dbcb9589601.mokky.dev/items')
     items.value = data
     itemsTime.value = data
-    pizza.value = itemsTime.value.filter(fil => fil.class === 'pizza')
+    pizzas.value = itemsTime.value.filter(fil => fil.class === 'pizza')
+    console.log(pizzaTime.value, 1232131)
     pizzaTime.value = itemsTime.value.filter(fil => fil.class === 'pizza')
     maxPrice.value = Math.max(...data.map(fil => fil.price))
     minPrice.value = Math.min(...data.map(fil => fil.price))
@@ -116,6 +126,7 @@ const fetchItems = async () => {
     cocktails.value = itemsTime.value.filter(fil => fil.class === 'cocktails')
     drinks.value = itemsTime.value.filter(fil => fil.class === 'drinks')
     haveValue()
+    console.log(pizza.value, 11)
 
   } catch (err) {
     console.log(err)
@@ -125,7 +136,7 @@ const fetchItems = async () => {
 const newItems = () => {
   filterItems()
   filterPizza()
-  pizza.value = itemsTime.value.filter(fil => fil.class === 'pizza')
+  pizzas.value = itemsTime.value.filter(fil => fil.class === 'pizza')
   breakfast.value = itemsTime.value.filter(fil => fil.class === 'breakfast')
   snacks.value = itemsTime.value.filter(fil => fil.class === 'snacks')
   cocktails.value = itemsTime.value.filter(fil => fil.class === 'cocktails')
@@ -169,12 +180,36 @@ const changePrice = () => {
   allPrice.value = cart.value.map(itm => itm.price).reduce((acc, cur) => acc + cur, 0)
 }
 
+const debounceAnimateDrawer = debounce(() => {
+  animateDrawer()
+}, 300)
 
+const animateDrawer = () => {
+  animateForDrawer.value = cart.value.length === 0
+                          ? true
+                          : false
+  console.log(animateForDrawer.value)
+}
 
+const placeOrder = () => {
+  order.value = JSON.parse(JSON.stringify(cart.value))
+  cart.value = []
+  console.log(order.value, 111)
+}
+
+const debouncePlaceOrder = debounce(() => {
+  placeOrder()
+}, 300)
+
+const allPlaceOrder = () => {
+  debouncePlaceOrder()
+}
 
 provide('cart', {
   cart,
-  allPrice
+  allPrice,
+  animateForDrawer,
+  animateCard
 })
 
 provide('model', {
@@ -183,7 +218,8 @@ provide('model', {
   openDrawer,
   openDrawerTrans,
   openDrawerFunc,
-  closeDrawer
+  closeDrawer,
+  allPlaceOrder
 })
 
 provide('box', {
@@ -209,23 +245,26 @@ provide('modelTr', {
   modelOpenTrans
 })
 
-watch(filterTime, async () => {
+watch(filterTime, () => {
   filterPizza()
 }, { deep: true })
 
-watch(filterTimeSize, filterPizza, { deep: true })
+watch(filterTimeSize, () => {
+  filterPizza()
+}, { deep: true })
 
 watch(filterTimeType, filterPizza, { deep: true })
 
-watch(value1.value, () => {
+watch(value1, () => {
   newItems()
 })
 
-watch(value2.value, () => {
+watch(value2, () => {
   newItems()
 })
 
 watch(cart, () => {
+  debounceAnimateDrawer()
   changePrice()
 }, { deep: true })
 
