@@ -100,13 +100,15 @@ onMounted(fetchInputSearch)
 <template>
   <div>
     <div class="flex justify-between h-11 gap-4">
-      <div class="flex gap-3 items-center">
-        <img id="pizza" class="h-9 " src="/logo.png" alt="">
-        <div class="flex flex-col items-center">
-          <h2 class="font-black text-2xl">VUE PIZZA</h2>
-          <span class="text-slate-400 text-sm leading-3">вкусней уже некуда</span>
+      <router-link to="/" >
+        <div class="flex gap-3 items-center">
+          <img id="pizza" class="h-9 " src="/logo.png" alt="">
+          <div class="flex flex-col items-center">
+            <h2 class="font-black text-2xl">VUE PIZZA</h2>
+            <span class="text-slate-400 text-sm leading-3">вкусней уже некуда</span>
+          </div>
         </div>
-      </div>
+      </router-link>
       <div class="flex flex-grow px-10">
         <div class="flex-grow relative">
           <img width="18" :class="['absolute top-3 left-3', showSearch === false ? 'z-20' : 'z-40']" src="/public/assets/images/Vector.svg" alt="">

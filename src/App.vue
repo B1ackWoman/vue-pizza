@@ -1,10 +1,9 @@
 <script setup>
 import { onMounted, provide, ref, watch } from 'vue';
 import axios, { all } from 'axios';
-import CardList from './components/CardList.vue';
+
+import MyHome from './pages/MyHome.vue';
 import MyHeader from './components/MyHeader.vue';
-import NavPanel from './components/NavPanel.vue';
-import FilterAll from './components/FilterAll.vue'
 import PopItem from './components/PopItem.vue';
 import MyDrawer from './components/MyDrawer.vue';
 import debounce from 'debounce';
@@ -16,9 +15,8 @@ const openDrawerTrans = ref(false)
 
 const cart = ref([])
 const order = ref([])
-const animateCard = ref(false)
 
-const animateForDrawer = ref(false)
+const animateForDrawer = ref(true)
 
 const allPrice = ref(0)
 
@@ -188,6 +186,15 @@ const closeDrawer = () => {
   debounceDrawerClose()
 }
 
+const placeOrder = () => {
+  openDrawer.value = false
+  openDrawerTrans.value = false
+  animateForDrawer.value = true
+  document.body.style.overflow = ''
+  order.value = JSON.parse(JSON.stringify(cart.value))
+  cart.value = []
+}
+
 const debounceDrawerOpen = debounce(() => {
   openDrawerTrans.value = !openDrawerTrans.value
 })
@@ -199,31 +206,6 @@ const debounceDrawerClose = debounce(() => {
 const changePrice = () => {
   console.log(cart.value.length)
   allPrice.value = cart.value.map(itm => itm.price).reduce((acc, cur) => acc + cur, 0)
-}
-
-const debounceAnimateDrawer = debounce(() => {
-  animateDrawer()
-}, 300)
-
-const animateDrawer = () => {
-  animateForDrawer.value = false
-  animateCard.value = false
-}
-
-const placeOrder = () => {
-  order.value = JSON.parse(JSON.stringify(cart.value))
-  cart.value = []
-  console.log(order.value, 111)
-}
-
-const debouncePlaceOrder = debounce(() => {
-  placeOrder()
-}, 300)
-
-const allPlaceOrder = () => {
-  animateCard.value = true
-  animateForDrawer.value = true
-  debouncePlaceOrder()
 }
 
 provide('all', {
@@ -238,7 +220,6 @@ provide('cart', {
   cart,
   allPrice,
   animateForDrawer,
-  animateCard
 })
 
 provide('model', {
@@ -249,7 +230,6 @@ provide('model', {
   openModel,
   openDrawerFunc,
   closeDrawer,
-  allPlaceOrder
 })
 
 provide('box', {
@@ -275,6 +255,18 @@ provide('modelTr', {
   modelOpenTrans
 })
 
+provide('Home', {
+  cart,
+  pizzaTime,
+  breakfast,
+  snacks,
+  cocktails,
+  drinks,
+  fetchFilter,
+  fetchItems,
+  placeOrder
+})
+
 watch(filterTime, () => {
   filterPizza()
 }, { deep: true })
@@ -294,7 +286,6 @@ watch(value2, () => {
 })
 
 watch(cart, () => {
-  debounceAnimateDrawer()
   changePrice()
 }, { deep: true })
 
@@ -320,28 +311,8 @@ onMounted(async () => {
         <MyHeader />
       </div>
     </div>
-    <div  class="sticky top-0 z-10 bg-white flex flex-col items-center border-b shadow-md rounded-xl">
-      <div class="w-full max-w-screen-xl py-6 bg-white">
-        <NavPanel :amount="cart.length" :content-list="0" />
-      </div>
-    </div>
-    <div :style="{zIndex: 0}" class="relative flex flex-col justify-center items-center w-full h-full py-7 px-7">
-      <div class="w-full h-full bg-white rounded-2xl max-w-screen-xl">
-          <div class="flex py-10 gap-20">
-            <div class="w-min">
-              <FilterAll />
-            </div>
-            <div>
-              <CardList ref="pizza" id="Пиццы" title="Пиццы" content="+ Добавить" :items="pizzaTime" />
-              <CardList id="Завтрак" title="Завтрак" content="+ Добавить" :items="breakfast" />
-              <CardList id="Закуски" title="Закуски" content="+ Добавить" :items="snacks" />
-              <CardList id="Коктели" title="Коктели" content="+ Добавить" :items="cocktails" />
-              <CardList id="Напитки" title="Напитки" content="+ Добавить" :items="drinks" />
-            </div>
-          </div>
-      </div>
-    </div>
   </div>
+  <router-view></router-view>
 </template>
 
 <style>

@@ -5,7 +5,8 @@ import ButtonOrder from './ButtonOrder.vue';
 import CardDrawerList from './CardDrawerList.vue';
 
 const { cart, allPrice, animateForDrawer } = inject('cart')
-const { closeDrawer, openDrawerTrans, allPlaceOrder } = inject('model')
+const { closeDrawer, openDrawerTrans } = inject('model')
+const { placeOrder } = inject('Home')
 
 </script>
 
@@ -20,7 +21,7 @@ const { closeDrawer, openDrawerTrans, allPlaceOrder } = inject('model')
     >
       <div>
         <div class="flex justify-between h-10 py-10 px-4 items-center">
-          <div v-show="!animateForDrawer" :class="['text-xl', cart.length === 0 ? '-translate-y-3 transtion duration-300 opacity-0' : 'opacity-100']">
+          <div v-show="cart.length > 0" :class="['text-xl', animateForDrawer == true ? '-translate-y-3 transtion duration-300 opacity-0' : 'opacity-100']">
             <span class="font-semibold">В корзине </span>
             <span class="font-bold">{{ cart.length }} товара</span>
           </div>
@@ -36,7 +37,7 @@ const { closeDrawer, openDrawerTrans, allPlaceOrder } = inject('model')
         </div>
       </div>
       <div
-        v-show="!animateForDrawer"
+        v-show="animateForDrawer"
         :class="[
           'flex w-full h-full flex-col justify-center items-center px-14 text-center gap-1 mb-10 transtion duration-300',
           cart.length == 0 ? '-translate-y-4 transition duration-300 opacity-100' : 'opacity-0'
@@ -51,14 +52,16 @@ const { closeDrawer, openDrawerTrans, allPlaceOrder } = inject('model')
       </div>
       <div v-show="cart.length > 0" :class="[
         'flex flex-col gap-4 bg-white py-10 px-6 rounded-t-lg',
-        cart.length === 0 ? 'translate-y-3 transtion duration-300 opacity-0' : 'opacity-100'
+        animateForDrawer == true ? 'translate-y-3 transtion duration-300 opacity-0' : 'opacity-100'
       ]">
         <div class="flex items-end">
           <span class="py-0 text-slate-400 text-lg">Итого</span>
           <div class="w-full border-b border-dashed border-slate-500"></div>
           <span class="text-nowrap font-bold text-lg">{{ allPrice }} ₽</span>
         </div>
-        <ButtonOrder @func-b="allPlaceOrder" content="Оформить заказ"/>
+        <router-link to="/order">
+          <ButtonOrder @func-b="placeOrder" content="Оформить заказ"/>
+        </router-link>
       </div>
     </div>
   </div>

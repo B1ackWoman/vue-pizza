@@ -5,14 +5,11 @@ import debounce from 'debounce';
 
 import CardDrawer from './CardDrawer.vue';
 
-const { animateForDrawer } = inject('cart')
-
-
 defineProps({
   items: Array,
 })
 
-const { cart, animateCard } = inject('cart')
+const { cart, animateForDrawer } = inject('cart')
 const animateCardDel = ref()
 
 const debounceForAll = debounce((item) => {
@@ -21,6 +18,8 @@ const debounceForAll = debounce((item) => {
 }, 300)
 
 const cartDelItem = (item) => {
+  animateForDrawer.value = cart.value.length == 1 ? true : false
+  console.log(cart.value.length, 111111111)
   animateCardDel.value = item.realId
   debounceForAll(item)
 }
@@ -43,8 +42,7 @@ const countMinus = (item) => {
 <template>
   <transition-group
     :class="[
-      'grid grid-cols-1 gap-4 transition duration-300',
-      animateCard === true ? 'opacity-0 -translate-y-5' : 'opacity-100'
+      'grid grid-cols-1 gap-4 transition duration-300 opacity-100'
     ]"
     tag="div"
     name="cardList"

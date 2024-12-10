@@ -28,7 +28,7 @@ const timeSize = ref(100)
 let summPrice = ref(0)
 const summPriceList = ref([])
 
-const { cart } = inject('cart')
+const { cart, animateForDrawer } = inject('cart')
 const { ingForPizza, ingForPizzaTime } = inject('box')
 const { modelOpen, itemTime } = inject('model')
 const { modelOpenTrans } = inject('modelTr')
@@ -185,6 +185,7 @@ const changeContent = () => {
 }
 
 const addToCart = () => {
+  animateForDrawer.value = false
   itemTime.value.realId = counterId.value
   counterId.value++
   itemTime.value.allIng = summPriceList.value.filter(itm => itm.class === 'ingredients').map(itm => itm.text)
@@ -227,7 +228,7 @@ onMounted(fetchFilterButton)
 <template>
   <div @click="allClose" class="fixed z-20 w-full h-full bg-black opacity-50" style="z-index: 101;">
   </div>
-  <div @click="allClose" :class="['fixed w-full h-full max-h-[700px] max-w-screen-xl z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2', timeSize == 0 ? 'max-h-[470px]' : '']" style="z-index: 102;">
+  <div @click="allClose" :class="['fixed w-full h-full max-h-[700px] max-w-screen-xl z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2', timeSize == 0 ? 'max-h-[580px]' : '']" style="z-index: 102;">
     <div @click="allClose" class="fixed group cursor-pointer top-0 right-16 w-10 h-10 z-50" style="z-index: 102;">
       <span class="absolute w-7 border-b border-2 border-white right-5 top-6 rotate-45 group-hover:border-slate-100 group-hover:scale-x-125 transtion duration-200"></span>
       <span class="absolute w-7 border-b border-2 border-white right-5 top-6 -rotate-45 group-hover:border-slate-100 group-hover:scale-x-125 transtion duration-200"></span>
@@ -236,7 +237,7 @@ onMounted(fetchFilterButton)
   <div class="fixed flex w-full h-full max-h-[650px] max-w-screen-lg top-1/2 left-1/2 bg-white shadow-xl transform -translate-x-1/2 rounded-2xl overflow-hidden transition duration-00"
     :class="[
       modelOpenTrans ? 'translate-y-[-50%] opacity-100 transition duration-200' : 'opacity-0 translate-y-[-40%] transition duration-200',
-      timeSize == 0 ? 'max-h-[400px]' : ''
+      timeSize == 0 ? 'max-h-[490px]' : ''
     ]"
     style="z-index: 102;"
   >

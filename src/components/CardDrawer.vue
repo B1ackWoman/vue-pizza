@@ -17,13 +17,16 @@ defineProps ({
   animateCardDel: Number,
 })
 
+const { cart } = inject('cart')
+
 const emit = defineEmits(['countPlus', 'countMinus', 'cartDelItem'])
 
 </script>
 
 <template>
   <div :class="['flex bg-white rounded-xl shadow-md mx-4 px-4 py-4 gap-4 transition duration-300 transform',
-                animateCardDel === id ? '-translate-x-3 opacity-0' : ''
+                animateCardDel === id && cart.length !== 1 ? '-translate-x-3 opacity-0' : '',
+                animateCardDel === id && cart.length == 1 ? '-translate-y-3 opacity-0' : ''
   ]">
     <div>
       <img width="80" :src="imageUrl" alt="">
