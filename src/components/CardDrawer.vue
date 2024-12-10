@@ -31,7 +31,7 @@ const emit = defineEmits(['countPlus', 'countMinus', 'cartDelItem'])
     <div class="flex flex-col gap-2 w-full">
       <div class="flex flex-col border-b pb-4">
         <span class="text-xl font-bold">{{ name }}</span>
-        <span class="text-xs text-slate-500">{{ type }} {{ needSize }} см{{ allIng ? ', ' + allIng : ''  }}</span>
+        <span class="text-xs text-slate-500">{{ type }} {{ needSize != '0' ? needSize + ' см' : ''}} {{type !== '' ? allIng ? ', ' + allIng : '' : '' }}</span>
       </div>
       <div class="flex justify-between items-center">
         <div class="flex gap-4 items-center">

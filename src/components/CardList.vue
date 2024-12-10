@@ -12,21 +12,7 @@ defineProps ({
   id: String,
 })
 
-const { itemTime, modelOpen } = inject('model')
-const { modelOpenTrans } = inject('modelTr')
-
-const debounceOpen = (debounce(() => {
-  modelOpenTrans.value = true
-}, 300))
-
-
-const openModel = (item) => {
-  modelOpen.value = !modelOpen.value
-  document.body.style.overflow = 'hidden'
-  itemTime.value = JSON.parse(JSON.stringify(item))
-  modelOpenTrans.value = false
-  debounceOpen()
-}
+const { itemTime, modelOpen, openModel } = inject('model')
 
 </script>
 

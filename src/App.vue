@@ -63,6 +63,23 @@ const showInputSearch = ref(false)
 
 const model = ref(false)
 
+
+
+const debounceOpen = (debounce(() => {
+  modelOpenTrans.value = true
+}, 300))
+
+
+const openModel = (item) => {
+  modelOpen.value = !modelOpen.value
+  document.body.style.overflow = 'hidden'
+  itemTime.value = JSON.parse(JSON.stringify(item))
+  console.log(itemTime.value)
+  modelOpenTrans.value = false
+  debounceOpen()
+}
+
+
 const haveValue = () => {
   value1.value = minPrice.value
   value2.value = maxPrice.value
@@ -167,6 +184,7 @@ const openDrawerFunc = () => {
 
 const closeDrawer = () => {
   openDrawerTrans.value = !openDrawerTrans.value
+  document.body.style.overflow = ''
   debounceDrawerClose()
 }
 
@@ -228,6 +246,7 @@ provide('model', {
   itemTime,
   openDrawer,
   openDrawerTrans,
+  openModel,
   openDrawerFunc,
   closeDrawer,
   allPlaceOrder
@@ -287,7 +306,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-show="model" @click="allClose" class="fixed z-20 w-full h-full bg-black opacity-50">
+  <div v-show="model" class="fixed z-20 w-full h-full bg-black opacity-50">
   </div>
   <div v-show="openDrawer">
     <MyDrawer />

@@ -5,7 +5,7 @@ import debounce from 'debounce';
 
 import CardDrawer from './CardDrawer.vue';
 
-
+const { animateForDrawer } = inject('cart')
 
 
 defineProps({

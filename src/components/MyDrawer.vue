@@ -10,7 +10,7 @@ const { closeDrawer, openDrawerTrans, allPlaceOrder } = inject('model')
 </script>
 
 <template>
-  <div class="fixed z-20" >
+  <div class="fixed z-30" >
     <div @click="closeDrawer" class="fixed w-full h-full bg-black opacity-50">
     </div>
     <div class="fixed flex flex-col justify-between h-full w-full max-w-[400px] bg-slate-100 right-0 rounded-tl-md transition duration-300"
@@ -36,10 +36,10 @@ const { closeDrawer, openDrawerTrans, allPlaceOrder } = inject('model')
         </div>
       </div>
       <div
-        v-show="cart.length < 1"
+        v-show="!animateForDrawer"
         :class="[
           'flex w-full h-full flex-col justify-center items-center px-14 text-center gap-1 mb-10 transtion duration-300',
-          animateForDrawer === false  ? '-translate-y-4 transition duration-300 opacity-100' : 'opacity-0'
+          cart.length == 0 ? '-translate-y-4 transition duration-300 opacity-100' : 'opacity-0'
         ]"
       >
         <img width="120px" src="/public/assets/images/empty-box.png" alt="">
@@ -51,7 +51,7 @@ const { closeDrawer, openDrawerTrans, allPlaceOrder } = inject('model')
       </div>
       <div v-show="cart.length > 0" :class="[
         'flex flex-col gap-4 bg-white py-10 px-6 rounded-t-lg',
-        cart.length === 0 || animateForDrawer === true ? 'translate-y-3 transtion duration-300 opacity-0' : 'opacity-100'
+        cart.length === 0 ? 'translate-y-3 transtion duration-300 opacity-0' : 'opacity-100'
       ]">
         <div class="flex items-end">
           <span class="py-0 text-slate-400 text-lg">Итого</span>

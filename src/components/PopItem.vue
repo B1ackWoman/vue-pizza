@@ -225,16 +225,20 @@ onMounted(fetchFilterButton)
 </script>
 
 <template>
-  <div @click="allClose" class="fixed z-20 w-full h-full bg-black opacity-50">
+  <div @click="allClose" class="fixed z-20 w-full h-full bg-black opacity-50" style="z-index: 101;">
   </div>
-  <div @click="allClose" class="fixed w-full h-full max-h-[650px] max-w-screen-xl z-20 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-    <div @click="allClose" class="fixed group cursor-pointer top-0 right-16 w-10 h-10">
+  <div @click="allClose" :class="['fixed w-full h-full max-h-[700px] max-w-screen-xl z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2', timeSize == 0 ? 'max-h-[470px]' : '']" style="z-index: 102;">
+    <div @click="allClose" class="fixed group cursor-pointer top-0 right-16 w-10 h-10 z-50" style="z-index: 102;">
       <span class="absolute w-7 border-b border-2 border-white right-5 top-6 rotate-45 group-hover:border-slate-100 group-hover:scale-x-125 transtion duration-200"></span>
       <span class="absolute w-7 border-b border-2 border-white right-5 top-6 -rotate-45 group-hover:border-slate-100 group-hover:scale-x-125 transtion duration-200"></span>
     </div>
   </div>
-  <div class="fixed flex z-20 w-full h-full max-h-[650px] max-w-screen-lg top-1/2 left-1/2 bg-white shadow-xl transform -translate-x-1/2 rounded-2xl overflow-hidden transition duration-00"
-    :class="modelOpenTrans ? 'translate-y-[-50%] opacity-100 transition duration-200' : 'opacity-0 translate-y-[-40%] transition duration-200'"
+  <div class="fixed flex w-full h-full max-h-[650px] max-w-screen-lg top-1/2 left-1/2 bg-white shadow-xl transform -translate-x-1/2 rounded-2xl overflow-hidden transition duration-00"
+    :class="[
+      modelOpenTrans ? 'translate-y-[-50%] opacity-100 transition duration-200' : 'opacity-0 translate-y-[-40%] transition duration-200',
+      timeSize == 0 ? 'max-h-[400px]' : ''
+    ]"
+    style="z-index: 102;"
   >
     <div class="relative w-1/2 h-full px-10 flex items-center justify-center">
       <img :class="' transition duration-200'" width="60%" :src="item.imageUrl" alt=""
@@ -255,15 +259,15 @@ onMounted(fetchFilterButton)
         <div class="flex flex-col px-7 gap-2">
           <div class="flex flex-col gap-1">
             <h2 class="font-extrabold text-2xl">{{ item.name }}</h2>
-            <span class="text-gray-400 mb-4">{{ timeSize }} см, {{ item.type }} пицца</span>
+            <span class="text-gray-400 mb-4">{{ timeSize !== 0 ? timeSize + ' см,' : ''}} {{ item.type ? item.type + ' пицца' : '' }}</span>
           </div>
-          <div class="flex flex-col gap-5">
+          <div v-show="timeSize != 0" class="flex flex-col gap-5">
             <ButtonFilter :content-item="sizeContentTime" @content-func="onOrOff" :count="3"/>
             <ButtonFilter :content-item="typeContent" @content-func="onOrOff" />
           </div>
         </div>
         <div class="relative">
-          <IngItemList :items="ingForPizzaTime" @add-ing="addIng"/>
+          <IngItemList v-show="timeSize != 0" :items="ingForPizzaTime" @add-ing="addIng"/>
           <div class="fixed flex justify-center bottom-0 py-5 px-8 bg-slate-50 w-1/2">
             <button @click="addToCart" class="bg-orange-500 text-white font-bold py-4 w-full rounded-2xl">Добавить в корзину за {{ summPrice }} ₽</button>
         </div>
