@@ -10,6 +10,8 @@ import InputCardList from './InputCardList.vue';
 
 const { showInputSearch } = inject('input')
 const { model } = inject('all')
+const { placeOrders } = inject('Order')
+
 
 const show = ref(false)
 const showSearch = ref(false)
@@ -89,6 +91,12 @@ const fetchFilterDebounce = debounce(() => {
   fetchFilter()
 }, 500)
 
+
+const landing = () => {
+  placeOrders.value = false
+  document.body.style.backgroundColor = 'white'
+}
+
 watch(filters, () => {
   fetchFilterDebounce()
 })
@@ -101,7 +109,7 @@ onMounted(fetchInputSearch)
   <div>
     <div class="flex justify-between h-11 gap-4">
       <router-link to="/" >
-        <div class="flex gap-3 items-center">
+        <div @click="landing" class="flex gap-3 items-center">
           <img id="pizza" class="h-9 " src="/logo.png" alt="">
           <div class="flex flex-col items-center">
             <h2 class="font-black text-2xl">VUE PIZZA</h2>
@@ -111,8 +119,9 @@ onMounted(fetchInputSearch)
       </router-link>
       <div class="flex flex-grow px-10">
         <div class="flex-grow relative">
-          <img width="18" :class="['absolute top-3 left-3', showSearch === false ? 'z-20' : 'z-40']" src="/public/assets/images/Vector.svg" alt="">
+          <img width="18" v-show="!placeOrders" :class="['absolute top-3 left-3', showSearch === false ? 'z-20' : 'z-40']" src="/public/assets/images/Vector.svg" alt="">
           <input
+            v-show="!placeOrders"
             :class="[
               'relative bg-zinc-100 h-full w-full rounded-xl pl-10 text-md border border-zinc-50 focus:outline-none focus:border-slate-300',
               showSearch === false ? 'z-10' : 'z-30'

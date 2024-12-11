@@ -61,6 +61,8 @@ const showInputSearch = ref(false)
 
 const model = ref(false)
 
+const placeOrders = ref(false)
+const animateOrder = ref(false)
 
 
 const debounceOpen = (debounce(() => {
@@ -81,7 +83,7 @@ const openModel = (item) => {
 const haveValue = () => {
   value1.value = minPrice.value
   value2.value = maxPrice.value
-  console.log(pizza.value, 1231)
+  console.log(value1.value, value2.value, 1231)
 }
 
 const addOrDelSize = (item) => {
@@ -186,13 +188,19 @@ const closeDrawer = () => {
   debounceDrawerClose()
 }
 
+const debounceAnimate = debounce(() => {
+  animateOrder.value = true
+}, 400)
+
 const placeOrder = () => {
+  placeOrders.value = true
   openDrawer.value = false
   openDrawerTrans.value = false
   animateForDrawer.value = true
-  document.body.style.overflow = ''
+  document.body.style.backgroundColor = 'rgb(248 250 252)'
   order.value = JSON.parse(JSON.stringify(cart.value))
   cart.value = []
+  debounceAnimate()
 }
 
 const debounceDrawerOpen = debounce(() => {
@@ -267,6 +275,12 @@ provide('Home', {
   placeOrder
 })
 
+provide('Order', {
+  placeOrders,
+  order,
+  animateOrder
+})
+
 watch(filterTime, () => {
   filterPizza()
 }, { deep: true })
@@ -289,11 +303,6 @@ watch(cart, () => {
   changePrice()
 }, { deep: true })
 
-onMounted(async () => {
-  fetchItems()
-  fetchFilter()
-})
-
 </script>
 
 <template>
@@ -305,7 +314,7 @@ onMounted(async () => {
   <div v-show="modelOpen">
     <PopItem :item="itemTime" />
   </div>
-  <div class="relative">
+  <div :class="placeOrders === true ? 'bg-slate-50 mb-5' : 'bg-white'">
     <div class="flex flex-col items-center border-b ">
       <div class="w-full max-w-screen-xl py-10">
         <MyHeader />
