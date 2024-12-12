@@ -25,7 +25,7 @@ const emit = defineEmits(['openModel'])
         width="80%"
         :class="[
           'hover:-translate-y-4 transition duration-200',
-          modelOpen == true && itemTime.id === id ? '-translate-y-10' : ''
+          modelOpen == true && itemTime.id === id ? '-translate-y-4' : ''
         ]"
         :src="imageUrl"
         alt=""

@@ -10,8 +10,9 @@ import InputCardList from './InputCardList.vue';
 
 const { showInputSearch } = inject('input')
 const { model } = inject('all')
-const { placeOrders } = inject('Order')
+const { placeOrders, animateOrder } = inject('Order')
 
+const { landing } = inject('all')
 
 const show = ref(false)
 const showSearch = ref(false)
@@ -91,11 +92,6 @@ const fetchFilterDebounce = debounce(() => {
   fetchFilter()
 }, 500)
 
-
-const landing = () => {
-  placeOrders.value = false
-  document.body.style.backgroundColor = 'white'
-}
 
 watch(filters, () => {
   fetchFilterDebounce()

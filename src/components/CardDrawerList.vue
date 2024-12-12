@@ -14,12 +14,11 @@ const animateCardDel = ref()
 
 const debounceForAll = debounce((item) => {
   cart.value = cart.value.filter(itm => itm.realId !== item.realId)
-  console.log(cart.value)
+  console.log(cart.length, true)
 }, 300)
 
 const cartDelItem = (item) => {
   animateForDrawer.value = cart.value.length == 1 ? true : false
-  console.log(cart.value.length, 111111111)
   animateCardDel.value = item.realId
   debounceForAll(item)
 }
@@ -28,7 +27,6 @@ const countPlus = (item) => {
   item.count++
   item.price = item.realPrice * item.count
   item.disabled = false
-  console.log(cart.value)
 }
 
 const countMinus = (item) => {

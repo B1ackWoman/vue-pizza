@@ -2,13 +2,16 @@
 import OrderComp from '@/components/OrderComp.vue';
 import CardDrawerList from '@/components/CardDrawerList.vue';
 import ForOrderInput from '@/components/ForOrderInput.vue';
+import PlaceOrder from '@/components/PlaceOrder.vue';
+import ButtonOrder from '@/components/ButtonOrder.vue';
 
 
 import { inject, onMounted, onUnmounted } from 'vue';
 
 
+const { cart } = inject('cart')
 const { order, animateOrder, placeOrder } = inject('Order')
-
+const { landing } = inject('all')
 
 </script>
 
@@ -18,11 +21,23 @@ const { order, animateOrder, placeOrder } = inject('Order')
       <div class="py-10">
         <h2 class="text-4xl font-bold" >Оформление заказа</h2>
       </div>
-      <div class="flex">
+      <div class="flex gap-4">
         <div class="flex flex-col w-2/3 gap-10">
           <order-comp content="1. Корзина">
-            <div>
-              <CardDrawerList :items="order"/>
+            <div class="bg-white min-h-[70px]">
+              <CardDrawerList :items="cart"/>
+              <div class="flex gap-3 items-center" v-show="cart.length == 0">
+                <img class="w-16" src="/assets/images/empty-box.png" alt="">
+                <div>
+                  <h2 class="text-2xl font-bold">Корзина пуста</h2>
+                  <span class="text-sm text-slate-500">Добавьте товраы, для оплаты</span>
+                </div>
+                <router-link to='/' class="flex-grow px-28">
+                  <div class="w-full">
+                    <ButtonOrder  @click="landing" :left="true" content="Вернуться"/>
+                  </div>
+                </router-link>
+              </div>
             </div>
           </order-comp>
           <order-comp content="2. Персональные данные">
@@ -37,15 +52,12 @@ const { order, animateOrder, placeOrder } = inject('Order')
             <div class="flex flex-col gap-4 h-[200px]">
 
               <ForOrderInput />
-              <ForOrderInput content="" :full="true"/>
+              <textarea cols="30" rows="5" class="border rounded-xl px-2 py-2 focus:outline-none" placeholder="Комментарий к заказу"></textarea>
             </div>
           </order-comp>
         </div>
-        <div class="sticky flex-grow">
-
-        </div>
+        <PlaceOrder />
       </div>
     </div>
   </div>
 </template>
-

@@ -8,7 +8,6 @@ import CardList from '@/components/CardList.vue';
 
 const { cart, pizzaTime, breakfast, snacks, cocktails, drinks, fetchFilter, fetchItems} = inject('Home')
 
-
 onMounted(async () => {
   fetchItems()
   fetchFilter()

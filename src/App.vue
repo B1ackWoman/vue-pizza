@@ -19,6 +19,7 @@ const order = ref([])
 const animateForDrawer = ref(true)
 
 const allPrice = ref(0)
+const allPriceOrder = ref(0)
 
 const itemTime = ref([])
 
@@ -196,10 +197,10 @@ const placeOrder = () => {
   placeOrders.value = true
   openDrawer.value = false
   openDrawerTrans.value = false
-  animateForDrawer.value = true
   document.body.style.backgroundColor = 'rgb(248 250 252)'
   order.value = JSON.parse(JSON.stringify(cart.value))
-  cart.value = []
+  allPriceOrder.value = Number(JSON.stringify(allPrice.value))
+  console.log(allPriceOrder.value, false)
   debounceAnimate()
 }
 
@@ -216,8 +217,15 @@ const changePrice = () => {
   allPrice.value = cart.value.map(itm => itm.price).reduce((acc, cur) => acc + cur, 0)
 }
 
+const landing = () => {
+  placeOrders.value = false
+  animateOrder.value = false
+  document.body.style.backgroundColor = 'white'
+}
+
 provide('all', {
-  model
+  model,
+  landing
 })
 
 provide('input', {
@@ -227,6 +235,7 @@ provide('input', {
 provide('cart', {
   cart,
   allPrice,
+  allPriceOrder,
   animateForDrawer,
 })
 
