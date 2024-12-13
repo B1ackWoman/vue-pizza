@@ -1,16 +1,28 @@
 <script setup>
 
-import { inject, onMounted } from 'vue';
+import { inject, onMounted, onUnmounted } from 'vue';
 
 import NavPanel from '@/components/NavPanel.vue';
 import FilterAll from '@/components/FilterAll.vue';
 import CardList from '@/components/CardList.vue';
 
 const { cart, pizzaTime, breakfast, snacks, cocktails, drinks, fetchFilter, fetchItems} = inject('Home')
+const { value1, value2, minPrice, maxPrice } = inject('filter')
+
+const backUp = () => {
+  value1.value = 0
+  value2.value = 0
+  minPrice.value = 0
+  maxPrice.value = 0
+}
 
 onMounted(async () => {
   fetchItems()
   fetchFilter()
+})
+
+onUnmounted(async () => {
+  backUp()
 })
 </script>
 

@@ -7,6 +7,7 @@ import debounce from 'debounce';
 
 import MyButton from './MyButton.vue';
 import InputCardList from './InputCardList.vue';
+import MyEmpty from './MyEmpty.vue';
 
 const { showInputSearch } = inject('input')
 const { model } = inject('all')
@@ -60,10 +61,10 @@ const fetchFilter = async () => {
       name: filters.name
     }
     const { data } = await axios.get(`https://67184dbcb9589601.mokky.dev/items`, {params})
-    timeItemsInput.value = filters.name.length > 2
+    timeItemsInput.value = filters.name.length > 0
                           ? data.length !== 0
                           ? data.slice(0, 7)
-                          : JSON.parse(JSON.stringify(itemsInput.value.slice(0, 2)))
+                          : 0
                           : JSON.parse(JSON.stringify(itemsInput.value))
 
     console.log(data.length, timeItemsInput.value)

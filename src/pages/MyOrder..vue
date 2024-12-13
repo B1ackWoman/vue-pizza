@@ -26,7 +26,7 @@ const { landing } = inject('all')
           <order-comp content="1. Корзина">
             <div class="bg-white min-h-[70px]">
               <CardDrawerList :items="cart"/>
-              <div class="flex gap-3 items-center" v-show="cart.length == 0">
+              <div class="flex gap-3 items-center" v-show="cart.length == 0" style="animation: base 0.5s ease;">
                 <img class="w-16" src="/assets/images/empty-box.png" alt="">
                 <div>
                   <h2 class="text-2xl font-bold">Корзина пуста</h2>
@@ -61,3 +61,19 @@ const { landing } = inject('all')
     </div>
   </div>
 </template>
+
+
+<style>
+
+@keyframes base {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+</style>

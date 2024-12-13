@@ -180,6 +180,7 @@ const fetchFilter = async () => {
 
 const openDrawerFunc = () => {
   openDrawer.value = !openDrawer.value
+  document.body.style.overflow = 'hidden'
   debounceDrawerOpen()
 }
 
@@ -197,6 +198,7 @@ const placeOrder = () => {
   placeOrders.value = true
   openDrawer.value = false
   openDrawerTrans.value = false
+  document.body.style.overflow = ''
   document.body.style.backgroundColor = 'rgb(248 250 252)'
   order.value = JSON.parse(JSON.stringify(cart.value))
   allPriceOrder.value = Number(JSON.stringify(allPrice.value))
@@ -340,4 +342,7 @@ watch(cart, () => {
   font-family: "Nunito";
 }
 
+html {
+  scrollbar-width: thin;
+}
 </style>

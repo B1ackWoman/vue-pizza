@@ -16,10 +16,11 @@ const { cart } = inject('cart')
 
 <template>
   <button
+    :disabled="order == true && cart.length === 0"
     @click="emit('funcB')"
     :class="[
-      'flex gap-3 justify-center w-full py-2 font-bold text-white rounded-xl text-lg font-semibold hover:bg-orange-400 transition',
-      order == true && cart.length == 0 ? 'bg-slate-400' : ' bg-orange-500'
+      'flex gap-3 justify-center w-full py-2 font-bold text-white rounded-xl text-lg font-semibold transition',
+      order == true && cart.length == 0 ? 'bg-slate-400 duration-300' : ' bg-orange-500 hover:bg-orange-400'
       ]">
     <img v-show="left" class="h-13 grayscale rotate-180" width="15" src="/public/assets/images/arrow-right.svg" alt="">
     {{ content }}
