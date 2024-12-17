@@ -1,6 +1,7 @@
 <script setup>
-import NavList from './NavList.vue';
+import { inject } from 'vue'
 
+import NavList from './NavList.vue';
 import ButtonDrawer from './ButtonDrawer.vue';
 
 defineProps ({
@@ -16,7 +17,7 @@ defineProps ({
       <NavList />
     </div>
     <div class="py-1">
-      <ButtonDrawer :money="500" :amount="amount" image-url="assets/images/drawer.png"/>
+      <ButtonDrawer @func-b="openLoginForm" :money="500" :amount="amount" image-url="assets/images/drawer.png"/>
     </div>
   </div>
 </template>

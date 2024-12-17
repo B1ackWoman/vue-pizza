@@ -7,6 +7,7 @@ import MyHeader from './components/MyHeader.vue';
 import PopItem from './components/PopItem.vue';
 import MyDrawer from './components/MyDrawer.vue';
 import debounce from 'debounce';
+import LoginForm from './components/LoginForm.vue';
 
 const modelOpen = ref(false)
 const modelOpenTrans = ref(false)
@@ -61,6 +62,7 @@ const typeTime = ref([])
 const showInputSearch = ref(false)
 
 const model = ref(false)
+const loginOpen = ref(false)
 
 const placeOrders = ref(false)
 const animateOrder = ref(false)
@@ -225,9 +227,16 @@ const landing = () => {
   document.body.style.backgroundColor = 'white'
 }
 
+const closeAll = () => {
+  loginOpen.value = false
+  model.value = false
+  document.body.style.overflow = ''
+}
+
 provide('all', {
   model,
-  landing
+  loginOpen,
+  landing,
 })
 
 provide('input', {
@@ -317,13 +326,16 @@ watch(cart, () => {
 </script>
 
 <template>
-  <div v-show="model" class="fixed z-20 w-full h-full bg-black opacity-50">
+  <div @click="closeAll" v-show="model" class="fixed z-30 w-full h-full bg-black opacity-80">
   </div>
   <div v-show="openDrawer">
     <MyDrawer />
   </div>
   <div v-show="modelOpen">
     <PopItem :item="itemTime" />
+  </div>
+  <div>
+    <LoginForm/>
   </div>
   <div :class="placeOrders === true ? 'bg-slate-50 mb-5' : 'bg-white'">
     <div class="flex flex-col items-center border-b ">

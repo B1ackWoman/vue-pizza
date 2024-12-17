@@ -10,10 +10,9 @@ import InputCardList from './InputCardList.vue';
 import MyEmpty from './MyEmpty.vue';
 
 const { showInputSearch } = inject('input')
-const { model } = inject('all')
 const { placeOrders, animateOrder } = inject('Order')
 
-const { landing } = inject('all')
+const { model, loginOpen, landing } = inject('all')
 
 const show = ref(false)
 const showSearch = ref(false)
@@ -21,6 +20,12 @@ const showSearch = ref(false)
 const filters = reactive({})
 const timeItemsInput = ref([])
 const itemsInput = ref([])
+
+const openLoginForm = () => {
+  loginOpen.value = true
+  model.value = true
+  document.body.style.overflow = 'hidden'
+}
 
 const debounceOpen = debounce(() => {
   showInputSearch.value = true
@@ -133,7 +138,7 @@ onMounted(fetchInputSearch)
           <InputCardList v-show="showSearch" :items="timeItemsInput" :show-input-search="showInputSearch" />
         </div>
       </div>
-      <MyButton width="13" content="Войти" image-url="assets/images/Group.svg"/>
+      <MyButton @click-func="openLoginForm" width="13" content="Войти" image-url="assets/images/Group.svg"/>
     </div>
   </div>
 </template>
